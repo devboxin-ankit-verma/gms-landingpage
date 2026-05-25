@@ -1,12 +1,8 @@
 "use client";
 
-import { SectionHeading } from "../ui/section-heading";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../ui/accordion";
+import { Container } from "@/components/layout/container";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { FaqList } from "./faq-list";
 
 const faqs = [
   {
@@ -15,46 +11,34 @@ const faqs = [
   },
   {
     q: "Is it built for small workshops?",
-    a: "Yes. From single-bay garages to multi-location service centers, GMS AI scales with your operation.",
+    a: "Yes. From single-bay garages to multi-location service centers, GMS AI scales with your operation without overwhelming your team.",
   },
   {
     q: "How does AI help with inventory?",
-    a: "The system forecasts parts usage from your job history and alerts you before stock runs low.",
+    a: "The system forecasts parts usage from your job history, flags low stock early, and helps you order the right quantities so repairs never stall waiting on parts.",
   },
   {
     q: "Can technicians use it in the bay?",
-    a: "Yes. Digital job cards and updates work on desktop and mobile for technicians and front desk staff.",
+    a: "Yes. Digital job cards, voice-friendly updates, and mobile-friendly workflows work for technicians and front desk staff on desktop or phone.",
   },
   {
     q: "How do I get started?",
-    a: "Book a demo and our team will configure a walkthrough for your workshop workflow.",
+    a: "Book a demo and our team will configure a tailored walkthrough for your workshop workflow and billing setup.",
   },
 ];
 
 export function FaqSection() {
   return (
-    <section id="faq" className="bg-[#F8FAFC] py-20 md:py-28">
-      <div className="mx-auto max-w-2xl px-4 md:px-8">
+    <section id="faq" className="section-pad bg-white">
+      <Container narrow>
         <SectionHeading
           badge="FAQ"
           title="Common questions"
           description="Answers for garage owners evaluating GMS AI."
+          className="section-heading-gap"
         />
-        <Accordion
-          type="single"
-          collapsible
-          className="faq-list mt-10 space-y-2"
-        >
-          {faqs.map((faq, i) => (
-            <AccordionItem key={i} value={`item-${i}`} className="faq-item">
-              <AccordionTrigger className="cursor-pointer">
-                {faq.q}
-              </AccordionTrigger>
-              <AccordionContent>{faq.a}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </div>
+        <FaqList items={faqs} />
+      </Container>
     </section>
   );
 }

@@ -6,11 +6,13 @@
   --foreground: #111827;
   --muted: #6b7280;
   --primary: #8b5cf6;
+  --primary-dark: #7c3aed;
   --primary-light: #ede9fe;
   --border: #e5e7eb;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --font-inter: "Inter", system-ui, sans-serif;
   --font-heading: "Plus Jakarta Sans", system-ui, sans-serif;
+  --header-h: 4rem;
 }
 
 @theme inline {
@@ -23,6 +25,11 @@
   --color-section: var(--section);
   --font-sans: var(--font-inter);
   --font-heading: var(--font-heading);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: var(--header-h);
 }
 
 html.lenis,
@@ -38,12 +45,220 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.6;
   overflow-x: hidden;
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  body {
+    font-size: 1rem;
+  }
+}
+
+main {
+  min-width: 0;
+  overflow-x: clip;
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
+  height: auto;
 }
 
 ::selection {
-  background: #ede9fe;
-  color: #111827;
+  background: var(--primary-light);
+  color: var(--foreground);
+}
+
+/* Typography */
+.font-heading {
+  font-family: var(--font-heading), system-ui, sans-serif;
+}
+
+.text-display {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--foreground);
+}
+
+.text-h2 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  font-size: clamp(1.375rem, 2.4vw, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.text-h3 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+@media (min-width: 640px) {
+  .text-h3 {
+    font-size: 1.125rem;
+  }
+}
+
+.text-body {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.text-body-lg {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+@media (min-width: 1024px) {
+  .text-body-lg {
+    font-size: 1.0625rem;
+  }
+}
+
+/* Components */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  background: var(--primary-light);
+  padding: 0.3125rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.card {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background: var(--background);
+}
+
+.card-hover {
+  transition: border-color 0.2s var(--ease);
+}
+
+.card-hover:hover {
+  border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
+}
+
+.section-pad {
+  padding-block: clamp(2.75rem, 5.5vw, 4.5rem);
+}
+
+.section-heading-gap {
+  margin-bottom: clamp(1.5rem, 3.5vw, 2.25rem);
+}
+
+/* Keep section headings readable if GSAP hasn't run yet */
+.gsap-sec-heading .gsap-sec-badge,
+.gsap-sec-heading .gsap-sec-title,
+.gsap-sec-heading .gsap-sec-desc {
+  opacity: 1;
+  visibility: visible;
+}
+
+main > section + section {
+  scroll-margin-top: var(--header-h);
+}
+
+.section-alt {
+  background: var(--section);
+}
+
+.illustration-box {
+  width: 100%;
+  max-width: min(100%, 280px);
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .illustration-box {
+    max-width: 300px;
+  }
+}
+
+.illustration-box svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Hero grid background */
+.hero-grid {
+  background-image:
+    linear-gradient(to right, rgba(139, 92, 246, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(139, 92, 246, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 75%);
+}
+
+/* Navbar scroll state */
+.nav-scrolled {
+  border-color: var(--border) !important;
+  background: color-mix(in srgb, var(--background) 96%, transparent) !important;
+  box-shadow: 0 1px 0 rgba(17, 24, 39, 0.04);
+}
+
+.nav-scrolled .page-container,
+.nav-header .flex.h-16 {
+  /* container stays 64px — subtle only */
+}
+
+.magnetic-btn {
+  display: inline-flex;
+}
+
+.tl-visual-inner {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tl-panel:hover .tl-visual-inner {
+  transform: scale(1.02);
+}
+
+/* Bold garage timeline SVGs */
+.garage-svg-bold line,
+.garage-svg-bold path[stroke],
+.garage-svg-bold rect[stroke],
+.garage-svg-bold circle[stroke] {
+  stroke-width: 3;
+}
+
+.garage-svg-bold path[stroke="#8B5CF6"],
+.garage-svg-bold line[stroke="#8B5CF6"] {
+  stroke-width: 3.25;
+}
+
+.garage-svg-bold rect:not([stroke]) {
+  stroke: #d1d5db;
+  stroke-width: 2;
+}
+
+.tl-visual-inner {
+  will-change: transform;
+}
+
+/* Footer brand block */
+.footer-brand {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.footer-brand .font-heading {
+  line-height: 1.2;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,30 +1,19 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { registerGsap } from "@/lib/gsap-config";
+import {
+  DURATION,
+  EASE_GSAP,
+  SCROLL_START,
+  TOGGLE_PLAY,
+  animateSectionHeading,
+  initVerticalTimeline,
+} from "@/lib/animations";
 
-export const EASE = "power2.out";
-export const SCROLL_START = "top 88%";
-export const TOGGLE_PLAY = "play none none none";
+export const EASE = EASE_GSAP;
+export { SCROLL_START, TOGGLE_PLAY };
 
-export function animateSectionHeading(heading: HTMLElement) {
-  const parts = heading.querySelectorAll(
-    ".gsap-sec-badge, .gsap-sec-title, .gsap-sec-desc"
-  );
-  if (!parts.length) return;
-
-  gsap.from(parts, {
-    scrollTrigger: {
-      trigger: heading,
-      start: SCROLL_START,
-      toggleActions: TOGGLE_PLAY,
-    },
-    y: 22,
-    opacity: 0,
-    duration: 0.7,
-    stagger: 0.1,
-    ease: EASE,
-  });
-}
+export { animateSectionHeading };
 
 export function initScrollReveals(
   scope: HTMLElement | null,
@@ -41,12 +30,12 @@ export function initScrollReveals(
         start: options?.start ?? "top 85%",
         toggleActions: TOGGLE_PLAY,
       },
-      y: options?.y ?? 24,
+      y: options?.y ?? 18,
       opacity: 0,
-      scale: options?.scale ?? 0.97,
-      duration: 0.7,
+      scale: options?.scale ?? 0.98,
+      duration: DURATION.base,
       stagger: options?.stagger ?? 0.08,
-      ease: EASE,
+      ease: EASE_GSAP,
     });
   }, scope);
 
@@ -57,25 +46,54 @@ export function initHeroEntrance(scope: HTMLElement | null) {
   registerGsap();
   if (!scope) return () => {};
 
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   const ctx = gsap.context(() => {
-    const tl = gsap.timeline({ defaults: { ease: EASE } });
-    tl.from(".hero-badge", { y: 14, opacity: 0, duration: 0.55 }, 0.15)
+    const tl = gsap.timeline({
+      defaults: { ease: EASE_GSAP },
+      delay: 0.08,
+    });
+
+    tl.from(".hero-badge", { y: 12, opacity: 0, duration: 0.55 })
       .from(
-        ".hero-title",
-        { y: 32, opacity: 0, duration: 0.8 },
-        0.28
+        ".hero-line-inner",
+        {
+          y: "110%",
+          opacity: 0,
+          duration: 0.85,
+          stagger: 0.12,
+        },
+        0.12
       )
-      .from(".hero-desc", { y: 18, opacity: 0, duration: 0.65 }, 0.42)
+      .from(".hero-desc", { y: 16, opacity: 0, duration: 0.7 }, 0.38)
       .from(
         ".hero-cta > *",
-        { y: 14, opacity: 0, duration: 0.5, stagger: 0.09 },
-        0.55
+        { y: 12, opacity: 0, duration: 0.5, stagger: 0.08 },
+        0.5
       )
       .from(
-        ".hero-visual",
-        { scale: 0.92, opacity: 0, duration: 0.95, transformOrigin: "50% 50%" },
-        0.32
+        ".hero-trust li",
+        { y: 10, opacity: 0, duration: 0.45, stagger: 0.06 },
+        0.62
+      )
+      .from(
+        ".hero-visual-inner",
+        {
+          opacity: 0,
+          scale: 0.94,
+          duration: DURATION.slow,
+          transformOrigin: "50% 50%",
+        },
+        0.28
       );
+
+    if (!reduced) {
+      gsap.to(".hero-grid", {
+        opacity: 0.6,
+        duration: 2,
+        ease: "none",
+      });
+    }
   }, scope);
 
   return () => ctx.revert();
@@ -87,23 +105,37 @@ export function initNavbarEntrance(header: HTMLElement | null) {
 
   const ctx = gsap.context(() => {
     gsap.from(header, {
-      y: -20,
+      y: -16,
       opacity: 0,
-      duration: 0.75,
-      ease: EASE,
-      delay: 0.08,
+      duration: 0.7,
+      ease: EASE_GSAP,
     });
     gsap.from(header.querySelectorAll(".nav-item"), {
-      y: -10,
+      y: -8,
       opacity: 0,
       duration: 0.5,
       stagger: 0.05,
-      ease: EASE,
-      delay: 0.22,
+      ease: EASE_GSAP,
+      delay: 0.15,
     });
   }, header);
 
   return () => ctx.revert();
+}
+
+export function initNavbarScroll(header: HTMLElement | null) {
+  registerGsap();
+  if (!header) return () => {};
+
+  const st = ScrollTrigger.create({
+    start: 0,
+    end: "max",
+    onUpdate: (self) => {
+      header.classList.toggle("nav-scrolled", self.scroll() > 48);
+    },
+  });
+
+  return () => st.kill();
 }
 
 export function initDashboardAnimations(scope: HTMLElement | null) {
@@ -117,11 +149,10 @@ export function initDashboardAnimations(scope: HTMLElement | null) {
         start: "top 85%",
         toggleActions: TOGGLE_PLAY,
       },
-      y: 36,
+      y: 28,
       opacity: 0,
-      scale: 0.98,
-      duration: 0.85,
-      ease: EASE,
+      duration: DURATION.slow,
+      ease: EASE_GSAP,
     });
 
     gsap.from(".dash-metric", {
@@ -130,12 +161,12 @@ export function initDashboardAnimations(scope: HTMLElement | null) {
         start: "top 78%",
         toggleActions: TOGGLE_PLAY,
       },
-      y: 16,
+      y: 14,
       opacity: 0,
       duration: 0.55,
       stagger: 0.07,
-      ease: EASE,
-      delay: 0.15,
+      ease: EASE_GSAP,
+      delay: 0.12,
     });
 
     gsap.from(".dash-bar", {
@@ -146,10 +177,10 @@ export function initDashboardAnimations(scope: HTMLElement | null) {
       },
       scaleY: 0,
       transformOrigin: "bottom center",
-      duration: 0.65,
-      stagger: 0.06,
-      ease: EASE,
-      delay: 0.2,
+      duration: 0.75,
+      stagger: 0.07,
+      ease: EASE_GSAP,
+      delay: 0.18,
     });
 
     gsap.from(".dash-ai-panel", {
@@ -158,77 +189,28 @@ export function initDashboardAnimations(scope: HTMLElement | null) {
         start: "top 88%",
         toggleActions: TOGGLE_PLAY,
       },
-      x: 16,
+      y: 12,
       opacity: 0,
       duration: 0.6,
-      ease: EASE,
+      ease: EASE_GSAP,
+    });
+
+    gsap.to(scope, {
+      y: -8,
+      ease: "none",
+      scrollTrigger: {
+        trigger: scope,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 0.8,
+      },
     });
   }, scope);
 
   return () => ctx.revert();
 }
 
-export function initFeatureTimelineAnimations(
-  section: HTMLElement,
-  panelSelector: string,
-  getDirection: (index: number) => "left" | "right"
-) {
-  registerGsap();
-  const panels = gsap.utils.toArray<HTMLElement>(panelSelector);
-  const mm = gsap.matchMedia();
-
-  const build = (scrub: boolean | number) => {
-    panels.forEach((panel, i) => {
-      const ill = panel.querySelector<HTMLElement>(".ft-ill-inner");
-      const content = panel.querySelector<HTMLElement>(".ft-content");
-      const fromLeft = getDirection(i) === "left";
-      const enterX = fromLeft ? -72 : 72;
-
-      if (ill) {
-        gsap.fromTo(
-          ill,
-          { x: enterX, opacity: 0 },
-          {
-            x: 0,
-            opacity: 1,
-            ease: EASE,
-            scrollTrigger: {
-              trigger: panel,
-              start: "top 78%",
-              end: "center 55%",
-              scrub: scrub,
-            },
-          }
-        );
-      }
-
-      if (content) {
-        gsap.fromTo(
-          content,
-          { y: 20, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            ease: EASE,
-            scrollTrigger: {
-              trigger: panel,
-              start: "top 72%",
-              end: "center 50%",
-              scrub: scrub,
-            },
-          }
-        );
-      }
-    });
-  };
-
-  mm.add("(min-width: 768px)", () => build(0.45));
-  mm.add("(max-width: 767px)", () => build(false));
-
-  return () => {
-    mm.revert();
-  };
-}
+export const initFeatureTimelineAnimations = initVerticalTimeline;
 
 export function initPagePremiumAnimations() {
   registerGsap();
@@ -245,11 +227,10 @@ export function initPagePremiumAnimations() {
           start: SCROLL_START,
           toggleActions: TOGGLE_PLAY,
         },
-        y: 28,
+        y: 22,
         opacity: 0,
-        scale: 0.98,
-        duration: 0.75,
-        ease: EASE,
+        duration: DURATION.base,
+        ease: EASE_GSAP,
       });
     });
 
@@ -259,11 +240,11 @@ export function initPagePremiumAnimations() {
         start: "top 86%",
         toggleActions: TOGGLE_PLAY,
       },
-      y: 14,
+      y: 12,
       opacity: 0,
       duration: 0.55,
-      stagger: 0.07,
-      ease: EASE,
+      stagger: 0.06,
+      ease: EASE_GSAP,
     });
 
     gsap.from(".contact-field", {
@@ -272,11 +253,11 @@ export function initPagePremiumAnimations() {
         start: "top 86%",
         toggleActions: TOGGLE_PLAY,
       },
-      y: 12,
+      y: 10,
       opacity: 0,
       duration: 0.5,
-      stagger: 0.06,
-      ease: EASE,
+      stagger: 0.05,
+      ease: EASE_GSAP,
     });
 
     gsap.from(".contact-submit", {
@@ -285,10 +266,10 @@ export function initPagePremiumAnimations() {
         start: "top 92%",
         toggleActions: TOGGLE_PLAY,
       },
-      y: 10,
+      y: 8,
       opacity: 0,
       duration: 0.45,
-      ease: EASE,
+      ease: EASE_GSAP,
     });
 
     gsap.from(".footer-block", {
@@ -297,11 +278,11 @@ export function initPagePremiumAnimations() {
         start: "top 92%",
         toggleActions: TOGGLE_PLAY,
       },
-      y: 18,
+      y: 16,
       opacity: 0,
       duration: 0.6,
-      stagger: 0.08,
-      ease: EASE,
+      stagger: 0.07,
+      ease: EASE_GSAP,
     });
 
     gsap.from(".video-clip-card", {
@@ -310,12 +291,11 @@ export function initPagePremiumAnimations() {
         start: "top 88%",
         toggleActions: TOGGLE_PLAY,
       },
-      y: 16,
+      y: 14,
       opacity: 0,
-      scale: 0.96,
       duration: 0.55,
-      stagger: 0.08,
-      ease: EASE,
+      stagger: 0.07,
+      ease: EASE_GSAP,
     });
   });
 

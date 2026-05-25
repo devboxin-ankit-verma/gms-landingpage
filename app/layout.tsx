@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "GMS AI — Smart AI System for Modern Garages",
+  title: "GMS AI — AI Operating System for Modern Garages",
   description:
-    "Garage Master AI by Developer Box AI. Manage billing, inventory, customer support, analytics, and workshop operations with AI automation.",
+    "GMS AI by Developer Box AI. Streamline workshop operations, automate customer management, and grow your garage with AI-powered tools.",
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
@@ -35,7 +35,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="min-w-0 antialiased">{children}</body>
     </html>
   );
 }

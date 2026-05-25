@@ -2,13 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { gsap } from "gsap";
+import { Container } from "@/components/layout/container";
 import { BookDemoButton } from "./book-demo-button";
 import { GmsLogo } from "./brand/gms-logo";
-import { initNavbarEntrance } from "@/lib/gsap-animations";
+import { initNavbarEntrance, initNavbarScroll } from "@/lib/gsap-animations";
+import { EASE_GSAP } from "@/lib/animations/constants";
 
 const links = [
   { label: "Features", href: "#features" },
-  { label: "Solutions", href: "#solutions" },
+  { label: "Platform", href: "#platform" },
   { label: "Preview", href: "#preview" },
   { label: "FAQ", href: "#faq" },
 ];
@@ -16,9 +19,16 @@ const links = [
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const menuInnerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    return initNavbarEntrance(headerRef.current);
+    const cleanupEntrance = initNavbarEntrance(headerRef.current);
+    const cleanupScroll = initNavbarScroll(headerRef.current);
+    return () => {
+      cleanupEntrance();
+      cleanupScroll();
+    };
   }, []);
 
   useEffect(() => {
@@ -27,54 +37,124 @@ export function Navbar() {
     return () => window.removeEventListener("gms-close-mobile-nav", close);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  useEffect(() => {
+    const menu = menuRef.current;
+    const inner = menuInnerRef.current;
+    if (!menu || !inner) return;
+
+    const items = inner.querySelectorAll<HTMLElement>(".mobile-nav-link, .mobile-nav-cta");
+
+    if (open) {
+      gsap.set(menu, { display: "block" });
+      gsap.fromTo(
+        menu,
+        { height: 0, opacity: 0 },
+        { height: "auto", opacity: 1, duration: 0.42, ease: EASE_GSAP }
+      );
+      gsap.fromTo(
+        items,
+        { y: 14, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.38,
+          stagger: 0.06,
+          delay: 0.1,
+          ease: EASE_GSAP,
+          clearProps: "opacity,transform",
+        }
+      );
+    } else {
+      gsap.to(items, {
+        y: 8,
+        opacity: 0,
+        duration: 0.22,
+        stagger: 0.03,
+        ease: EASE_GSAP,
+      });
+      gsap.to(menu, {
+        height: 0,
+        opacity: 0,
+        duration: 0.32,
+        ease: EASE_GSAP,
+        onComplete: () => gsap.set(menu, { display: "none" }),
+      });
+    }
+  }, [open]);
+
   return (
     <header
       ref={headerRef}
-      className="fixed top-0 left-0 right-0 z-50 border-b border-[#E5E7EB] bg-white/90 backdrop-blur-md"
+      className="nav-header fixed inset-x-0 top-0 z-50 border-b border-transparent bg-white/80 backdrop-blur-md transition-[border-color,box-shadow,background] duration-300"
     >
-      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:px-8">
-        <a href="#hero" className="cursor-pointer" aria-label="GMS AI home">
-          <GmsLogo size={36} showWordmark />
+      <Container className="flex h-16 items-center justify-between gap-4">
+        <a
+          href="#hero"
+          className="flex shrink-0 items-center"
+          aria-label="GMS AI home"
+        >
+          <GmsLogo size={36} showWordmark className="items-center" />
         </a>
 
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="hidden items-center gap-8 lg:flex">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="nav-item cursor-pointer text-sm font-medium text-[#6b7280] transition-colors hover:text-[#111827]"
+              className="nav-item relative text-sm font-medium text-[#6b7280] transition-colors hover:text-[#111827]"
             >
               {l.label}
             </a>
           ))}
-          <BookDemoButton size="sm" className="nav-item" />
+          <BookDemoButton size="sm" className="nav-item shrink-0" magnetic />
         </div>
 
         <button
           type="button"
-          className="cursor-pointer md:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-lg text-[#111827] transition-colors hover:bg-[#F8FAFC] lg:hidden"
           onClick={() => setOpen(!open)}
-          aria-label="Menu"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
         >
-          {open ? <X size={22} /> : <Menu size={22} />}
+          {open ? <X size={20} /> : <Menu size={20} />}
         </button>
-      </nav>
+      </Container>
 
-      {open && (
-        <div className="border-t border-[#E5E7EB] bg-white px-4 py-4 md:hidden">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="block cursor-pointer py-2 text-sm font-medium text-[#111827]"
-              onClick={() => setOpen(false)}
-            >
-              {l.label}
-            </a>
-          ))}
-          <BookDemoButton className="mt-3 w-full" />
-        </div>
-      )}
+      <div
+        ref={menuRef}
+        className="overflow-hidden border-t border-[#E5E7EB] bg-white lg:hidden"
+        style={{ height: 0, opacity: 0, display: open ? "block" : "none" }}
+      >
+        <Container>
+          <nav
+            ref={menuInnerRef}
+            className="flex flex-col items-center gap-1 py-5 text-center"
+            aria-label="Mobile navigation"
+          >
+            {links.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className="mobile-nav-link w-full max-w-xs rounded-xl px-4 py-3 text-center text-sm font-medium text-[#111827] transition-colors hover:bg-[#F8FAFC] hover:text-[#8B5CF6]"
+                onClick={() => setOpen(false)}
+              >
+                {l.label}
+              </a>
+            ))}
+            <BookDemoButton
+              className="mobile-nav-cta mt-2 w-full max-w-xs justify-center"
+              magnetic
+            />
+          </nav>
+        </Container>
+      </div>
     </header>
   );
 }

@@ -1,21 +1,23 @@
 "use client";
 
-import { SectionHeading } from "../ui/section-heading";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Button } from "../ui/button";
+import { Container } from "@/components/layout/container";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 export function ContactSection() {
   return (
-    <section id="contact" className="bg-white py-20 md:py-28">
-      <div className="mx-auto max-w-xl px-4 md:px-8">
+    <section id="contact" className="section-pad section-alt">
+      <Container narrow>
         <SectionHeading
           badge="Contact"
           title="Book a demo for your workshop"
           description="Tell us about your garage or service center. We'll show you a tailored GMS AI walkthrough."
+          className="section-heading-gap"
         />
         <form
-          className="contact-form mt-10 space-y-5 rounded-2xl border border-[#E5E7EB] bg-white p-6 md:p-8"
+          className="contact-form mx-auto max-w-xl space-y-4 rounded-3xl border border-[#E5E7EB] bg-white p-6 sm:p-8"
           onSubmit={(e) => e.preventDefault()}
         >
           {[
@@ -25,23 +27,27 @@ export function ContactSection() {
             { id: "phone", label: "Phone", type: "tel" },
           ].map((f) => (
             <div key={f.id} className="contact-field space-y-1.5">
-              <Label htmlFor={f.id}>{f.label}</Label>
-              <Input id={f.id} type={f.type} className="cursor-text" />
+              <Label htmlFor={f.id} className="text-sm text-[#111827]">
+                {f.label}
+              </Label>
+              <Input id={f.id} type={f.type} className="h-12 rounded-xl" />
             </div>
           ))}
           <div className="contact-field space-y-1.5">
-            <Label htmlFor="message">Message</Label>
+            <Label htmlFor="message" className="text-sm text-[#111827]">
+              Message
+            </Label>
             <textarea
               id="message"
               rows={4}
-              className="flex w-full cursor-text rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-sm transition-colors focus:border-[#8B5CF6]/50 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/15"
+              className="flex min-h-[7rem] w-full resize-y rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-sm leading-relaxed text-[#111827] transition-colors placeholder:text-[#9ca3af] focus:border-[#8B5CF6]/40 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/12"
             />
           </div>
-          <Button type="submit" className="contact-submit w-full cursor-pointer">
+          <Button type="submit" className="contact-submit h-12 w-full rounded-xl">
             Request demo
           </Button>
         </form>
-      </div>
+      </Container>
     </section>
   );
 }

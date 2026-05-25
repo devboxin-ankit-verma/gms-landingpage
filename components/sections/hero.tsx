@@ -1,13 +1,20 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Play } from "lucide-react";
-import { Button } from "../ui/button";
-import { BookDemoButton } from "../book-demo-button";
-import { HeroOrbit } from "../animations/hero-orbit";
-import ShinyText from "../react-bits/shiny-text";
+import { Play, CheckCircle2, Sparkles } from "lucide-react";
+import { Container } from "@/components/layout/container";
+import { Button } from "@/components/ui/button";
+import { BookDemoButton } from "@/components/book-demo-button";
+import { HeroVisual } from "@/components/three/hero-visual";
+import ShinyText from "@/components/react-bits/shiny-text";
 import { initHeroEntrance } from "@/lib/gsap-animations";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
+
+const TRUST = [
+  "Workshop-ready",
+  "AI automation",
+  "Built for garages",
+];
 
 export function HeroSection() {
   const ref = useRef<HTMLElement>(null);
@@ -21,61 +28,80 @@ export function HeroSection() {
     <section
       id="hero"
       ref={ref}
-      className="border-b border-[#E5E7EB] bg-white pt-28 pb-16 md:pt-32 md:pb-24"
+      className="relative overflow-hidden border-b border-[#E5E7EB] bg-white pt-[calc(var(--header-h)+1.5rem)] pb-12 md:pb-16 lg:pt-[calc(var(--header-h)+2rem)]"
     >
-      <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 md:grid-cols-2 md:gap-10 md:px-8">
-        <div className="order-2 md:order-1">
-          <span className="hero-badge mb-4 inline-block rounded-full bg-[#EDE9FE] px-3 py-1 text-xs font-semibold text-[#8B5CF6]">
-            AI Powered Garage Management
-          </span>
-          <h1 className="hero-title font-[family-name:var(--font-heading)] text-[1.75rem] font-bold leading-[1.12] tracking-tight text-[#111827] min-[400px]:text-4xl sm:text-5xl lg:text-[2.85rem]">
-            Smart{" "}
-            <ShinyText
-              text="GMS AI"
-              speed={2.2}
-              delay={0.4}
-              color="#7C3AED"
-              shineColor="#EDE9FE"
-              spread={120}
-              direction="left"
-              yoyo={false}
-              pauseOnHover={false}
-              disabled={reducedMotion}
-              className="font-[family-name:var(--font-heading)] font-bold"
-            />{" "}
-            System for{" "}
-            <ShinyText
-              text="Modern Garages"
-              speed={2.8}
-              delay={0.2}
-              color="#374151"
-              shineColor="#8B5CF6"
-              spread={110}
-              direction="left"
-              yoyo={false}
-              pauseOnHover
-              disabled={reducedMotion}
-              className="font-[family-name:var(--font-heading)] font-bold"
-            />
-          </h1>
-          <p className="hero-desc mt-4 max-w-lg text-base leading-relaxed text-[#6b7280] sm:mt-5 sm:text-lg">
-            Manage billing, inventory, customer support, analytics, and workshop
-            operations with AI-powered automation.
-          </p>
-          <div className="hero-cta mt-7 flex flex-wrap gap-3 sm:mt-8">
-            <BookDemoButton size="lg" showArrow />
-            <Button variant="outline" size="lg" className="cursor-pointer" asChild>
-              <a href="#preview">
-                <Play className="h-4 w-4" />
-                Watch Preview
-              </a>
-            </Button>
+      <div className="hero-grid pointer-events-none absolute inset-0 opacity-40" aria-hidden />
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,#EDE9FE_0%,transparent_52%)]"
+        aria-hidden
+      />
+
+      <Container className="relative">
+        <div className="flex min-w-0 flex-col gap-8 sm:gap-10 lg:grid lg:grid-cols-2 lg:items-center lg:gap-12">
+          <div className="order-1 w-full text-center lg:max-w-md lg:text-left xl:max-w-lg">
+            <span className="hero-badge badge mb-4 inline-flex text-[11px] sm:text-xs">
+              <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5" aria-hidden />
+              AI Operating System
+            </span>
+
+            <h1 className="hero-title font-heading text-[1.625rem] font-bold leading-[1.15] tracking-tight text-[#111827] sm:text-[1.875rem] md:text-[2rem] lg:text-[2.25rem]">
+              <span className="hero-line block overflow-hidden py-0.5">
+                <span className="hero-line-inner block">Run your garage smarter with</span>
+              </span>
+              <span className="hero-line block overflow-hidden py-0.5">
+                <span className="hero-line-inner block">
+                  <ShinyText
+                    text="GMS AI"
+                    speed={2.2}
+                    delay={0.35}
+                    color="#7C3AED"
+                    shineColor="#EDE9FE"
+                    spread={120}
+                    direction="left"
+                    pauseOnHover
+                    disabled={reducedMotion}
+                    className="font-heading text-[1.625rem] font-bold sm:text-[1.875rem] md:text-[2rem] lg:text-[2.25rem]"
+                  />
+                </span>
+              </span>
+            </h1>
+
+            <p className="hero-desc mx-auto mt-4 max-w-md text-sm leading-relaxed text-[#6b7280] sm:text-[0.9375rem] lg:mx-0">
+              Billing, bays, inventory, and customers — unified in one calm AI workspace
+              built for modern service centers.
+            </p>
+
+            <div className="hero-cta mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 lg:justify-start">
+              <BookDemoButton size="default" showArrow magnetic className="sm:!h-11" />
+              <Button variant="outline" size="default" className="magnetic-btn sm:!h-11" asChild>
+                <a href="#preview">
+                  <Play className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  Watch Preview
+                </a>
+              </Button>
+            </div>
+
+            <ul className="hero-trust mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 lg:justify-start">
+              {TRUST.map((item) => (
+                <li
+                  key={item}
+                  className="flex items-center gap-1.5 text-xs text-[#6b7280] sm:text-sm"
+                >
+                  <CheckCircle2
+                    className="h-3.5 w-3.5 shrink-0 text-[#8B5CF6] sm:h-4 sm:w-4"
+                    strokeWidth={2}
+                  />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="order-2 flex w-full justify-center lg:justify-end">
+            <HeroVisual />
           </div>
         </div>
-        <div className="hero-visual order-1 flex justify-center md:order-2">
-          <HeroOrbit />
-        </div>
-      </div>
+      </Container>
     </section>
   );
 }

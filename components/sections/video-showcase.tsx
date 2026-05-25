@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { Play, Pause, Sparkles } from "lucide-react";
-import { SectionHeading } from "../ui/section-heading";
-import { GmsLogo } from "../brand/gms-logo";
+import { Play, Pause } from "lucide-react";
+import { Container } from "@/components/layout/container";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { GmsLogo } from "@/components/brand/gms-logo";
 
 const GMS_CLIPS = [
   {
@@ -63,12 +64,10 @@ export function VideoSection() {
   const togglePlay = useCallback(() => {
     const v = videoRef.current;
     if (!v || playLockRef.current) return;
-
     if (!v.paused) {
       v.pause();
       return;
     }
-
     playLockRef.current = true;
     safePlay(v);
     const unlock = () => {
@@ -80,117 +79,99 @@ export function VideoSection() {
   }, []);
 
   return (
-    <section id="preview" className="bg-white py-20 md:py-28">
-      <div className="mx-auto max-w-3xl px-4 md:px-8">
+    <section id="preview" className="section-pad section-alt">
+      <Container narrow>
         <SectionHeading
           badge="Preview"
           title="See GMS AI in your workshop"
-          description="Short clips from real garage workflows — billing, diagnostics, and service bay operations powered by AI."
+          description="Short clips from real garage workflows — billing, diagnostics, and service bay operations."
+          className="section-heading-gap"
         />
 
-        <div className="mt-10 space-y-4">
-          <div className="gsap-reveal relative mx-auto max-w-xl overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#F8FAFC] shadow-sm">
-            <div className="flex items-center gap-2 border-b border-[#E5E7EB] bg-white px-3 py-2">
+        <div className="space-y-4">
+          <div className="gsap-reveal card overflow-hidden">
+            <div className="flex items-center gap-3 border-b border-[#E5E7EB] px-4 py-3">
               <GmsLogo size={28} />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-xs font-semibold text-[#111827]">
-                  {clip.label}
-                </p>
-                <p className="truncate text-[10px] text-[#6b7280]">
-                  by Developer Box AI · {clip.duration}
-                </p>
+                <p className="truncate text-sm font-semibold text-[#111827]">{clip.label}</p>
+                <p className="text-xs text-[#6b7280]">by Developer Box AI · {clip.duration}</p>
               </div>
-              <span className="flex items-center gap-1 rounded-full bg-[#EDE9FE] px-2 py-0.5 text-[10px] font-medium text-[#8B5CF6]">
-                <Sparkles className="h-3 w-3" aria-hidden />
-                GMS AI
-              </span>
             </div>
 
-            <video
-              key={clip.src}
-              ref={videoRef}
-              className="aspect-video w-full object-cover"
-              poster={clip.poster}
-              playsInline
-              preload="metadata"
-              onLoadedData={() => setReady(true)}
-              onPlay={() => setPlaying(true)}
-              onPause={() => setPlaying(false)}
-              onEnded={() => setPlaying(false)}
-            >
-              <source src={clip.src} type="video/mp4" />
-              Your browser does not support video playback.
-            </video>
+            <div className="relative bg-[#F8FAFC]">
+              <video
+                key={clip.src}
+                ref={videoRef}
+                className="aspect-video w-full object-cover"
+                poster={clip.poster}
+                playsInline
+                preload="metadata"
+                onLoadedData={() => setReady(true)}
+                onPlay={() => setPlaying(true)}
+                onPause={() => setPlaying(false)}
+                onEnded={() => setPlaying(false)}
+              >
+                <source src={clip.src} type="video/mp4" />
+              </video>
 
-            <button
-              type="button"
-              onClick={togglePlay}
-              className={`absolute inset-0 top-[41px] flex cursor-pointer items-center justify-center bg-[#111827]/10 transition-opacity duration-200 hover:bg-[#111827]/15 ${
-                playing ? "pointer-events-none opacity-0" : "opacity-100"
-              }`}
-              aria-label={`Play ${clip.label} preview`}
-              tabIndex={playing ? -1 : 0}
-            >
-              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-[#E5E7EB] bg-white transition-colors hover:border-[#8B5CF6]/40">
-                <Play
-                  className="ml-0.5 h-4 w-4 text-[#8B5CF6]"
-                  fill="#8B5CF6"
-                />
-              </span>
-            </button>
+              <button
+                type="button"
+                onClick={togglePlay}
+                className={`absolute inset-0 flex items-center justify-center bg-[#111827]/5 transition-opacity hover:bg-[#111827]/8 ${
+                  playing ? "pointer-events-none opacity-0" : "opacity-100"
+                }`}
+                aria-label={`Play ${clip.label}`}
+              >
+                <span className="flex h-12 w-12 items-center justify-center rounded-full border border-[#E5E7EB] bg-white">
+                  <Play className="ml-0.5 h-4 w-4 text-[#8B5CF6]" fill="#8B5CF6" />
+                </span>
+              </button>
 
-            <button
-              type="button"
-              onClick={togglePlay}
-              className={`absolute bottom-3 right-3 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#E5E7EB] bg-white/95 transition-opacity hover:border-[#8B5CF6]/40 ${
-                playing ? "opacity-100" : "pointer-events-none opacity-0"
-              }`}
-              aria-label="Pause video"
-              tabIndex={playing ? 0 : -1}
-            >
-              <Pause className="h-3.5 w-3.5 text-[#8B5CF6]" />
-            </button>
+              <button
+                type="button"
+                onClick={togglePlay}
+                className={`absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] bg-white transition-opacity hover:border-[#8B5CF6]/30 ${
+                  playing ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
+                aria-label="Pause"
+              >
+                <Pause className="h-3.5 w-3.5 text-[#8B5CF6]" />
+              </button>
 
-            <div className="pointer-events-none absolute bottom-3 left-3 max-w-[55%] rounded-lg bg-white/90 px-2 py-1 text-[10px] font-medium text-[#6b7280] backdrop-blur-sm">
-              {ready ? clip.hint : "Loading clip…"}
+              <div className="pointer-events-none absolute bottom-3 left-3 max-w-[70%] rounded-lg bg-white/95 px-2 py-1 text-[10px] font-medium text-[#6b7280]">
+                {ready ? clip.hint : "Loading…"}
+              </div>
             </div>
           </div>
 
-          <div className="video-clip-grid grid grid-cols-3 gap-2 sm:gap-3">
+          <div className="video-clip-grid flex gap-3 overflow-x-auto pb-1 snap-x sm:grid sm:grid-cols-3 sm:overflow-visible">
             {GMS_CLIPS.map((item, index) => (
               <button
                 key={item.src}
                 type="button"
                 onClick={() => selectClip(index)}
-                className={`video-clip-card group cursor-pointer overflow-hidden rounded-xl border text-left transition-colors ${
+                className={`video-clip-card card min-w-[42%] shrink-0 snap-start overflow-hidden text-left transition-colors sm:min-w-0 ${
                   activeClip === index
-                    ? "border-[#8B5CF6] bg-[#EDE9FE]/40 ring-1 ring-[#8B5CF6]/30"
-                    : "border-[#E5E7EB] bg-[#F8FAFC] hover:border-[#8B5CF6]/35"
+                    ? "border-[#8B5CF6] ring-1 ring-[#8B5CF6]/20"
+                    : "card-hover"
                 }`}
-                aria-label={`Preview clip: ${item.label}`}
                 aria-pressed={activeClip === index}
               >
-                <div className="relative aspect-video w-full overflow-hidden bg-[#111827]/5">
+                <div className="relative aspect-video overflow-hidden bg-[#F8FAFC]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={item.poster}
-                    alt=""
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                  />
-                  <span className="absolute bottom-1 right-1 rounded bg-[#111827]/75 px-1 py-0.5 text-[9px] font-medium text-white">
+                  <img src={item.poster} alt="" className="h-full w-full object-cover" />
+                  <span className="absolute bottom-1.5 right-1.5 rounded bg-[#111827]/75 px-1.5 py-0.5 text-[9px] text-white">
                     {item.duration}
                   </span>
                 </div>
-                <div className="px-2 py-1.5">
-                  <p className="truncate text-[11px] font-semibold text-[#111827] sm:text-xs">
-                    {item.label}
-                  </p>
-                </div>
+                <p className="truncate px-3 py-2 text-xs font-medium text-[#111827]">
+                  {item.label}
+                </p>
               </button>
             ))}
           </div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

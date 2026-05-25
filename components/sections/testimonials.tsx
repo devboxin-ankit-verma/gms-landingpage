@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { SectionHeading } from "../ui/section-heading";
+import { Container } from "@/components/layout/container";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { initScrollReveals } from "@/lib/gsap-animations";
 
 const items = [
@@ -30,38 +31,37 @@ export function TestimonialsSection() {
 
   useEffect(() => {
     return initScrollReveals(ref.current, ".testi-card", {
-      y: 18,
-      stagger: 0.08,
-      scale: 0.97,
+      y: 16,
+      stagger: 0.07,
+      scale: 0.98,
       start: "top 85%",
     });
   }, []);
 
   return (
-    <section ref={ref} className="bg-[#F8FAFC] py-20 md:py-28">
-      <div className="mx-auto max-w-6xl px-4 md:px-8">
+    <section ref={ref} className="section-pad bg-white">
+      <Container>
         <SectionHeading
           badge="Testimonials"
           title="Trusted by workshop teams"
           description="Garage owners and service managers using GMS AI across repair operations."
+          className="section-heading-gap"
         />
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3 md:gap-5">
           {items.map((t) => (
             <article
               key={t.name}
-              className="testi-card rounded-2xl border border-[#E5E7EB] bg-white p-6"
+              className="testi-card card card-hover flex h-full flex-col p-6 transition-transform duration-300 hover:-translate-y-1"
             >
-              <p className="text-sm leading-relaxed text-[#374151]">
-                &ldquo;{t.quote}&rdquo;
-              </p>
-              <footer className="mt-6 border-t border-[#E5E7EB] pt-4">
+              <p className="text-body flex-1 text-[#374151]">&ldquo;{t.quote}&rdquo;</p>
+              <footer className="mt-5 border-t border-[#E5E7EB] pt-4">
                 <p className="text-sm font-semibold text-[#111827]">{t.name}</p>
-                <p className="text-xs text-[#6b7280]">{t.role}</p>
+                <p className="mt-0.5 text-xs text-[#6b7280]">{t.role}</p>
               </footer>
             </article>
           ))}
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

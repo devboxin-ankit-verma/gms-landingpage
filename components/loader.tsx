@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap";
 import { GmsLogo } from "./brand/gms-logo";
+import { EASE_GSAP, DURATION } from "@/lib/animations/constants";
 
 interface LoaderProps {
   onComplete: () => void;
@@ -12,22 +13,22 @@ export function Loader({ onComplete }: LoaderProps) {
   const [progress, setProgress] = useState(0);
   const barRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
-  const logoRef = useRef<HTMLDivElement>(null);
+  const brandRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!logoRef.current || !rootRef.current) return;
-    const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-    tl.from(logoRef.current, { opacity: 0, scale: 0.88, duration: 0.65 })
-      .from(
-        rootRef.current.querySelectorAll(".loader-text"),
-        { opacity: 0, y: 8, duration: 0.45, stagger: 0.08 },
-        0.2
-      )
-      .from(
-        rootRef.current.querySelector(".loader-bar-track"),
-        { opacity: 0, y: 6, duration: 0.4 },
-        0.35
-      );
+    if (!brandRef.current) return;
+    gsap.from(brandRef.current, {
+      opacity: 0,
+      y: 14,
+      duration: DURATION.base,
+      ease: EASE_GSAP,
+    });
+    gsap.from(brandRef.current.querySelector("svg"), {
+      scale: 0.88,
+      duration: DURATION.slow,
+      ease: EASE_GSAP,
+      delay: 0.1,
+    });
   }, []);
 
   useEffect(() => {
@@ -39,7 +40,7 @@ export function Loader({ onComplete }: LoaderProps) {
         }
         return Math.min(100, p + 10);
       });
-    }, 90);
+    }, 85);
     return () => clearInterval(interval);
   }, []);
 
@@ -47,8 +48,8 @@ export function Loader({ onComplete }: LoaderProps) {
     if (barRef.current) {
       gsap.to(barRef.current, {
         width: `${Math.min(progress, 100)}%`,
-        duration: 0.25,
-        ease: "power2.out",
+        duration: 0.3,
+        ease: EASE_GSAP,
       });
     }
   }, [progress]);
@@ -57,9 +58,9 @@ export function Loader({ onComplete }: LoaderProps) {
     if (progress < 100 || !rootRef.current) return;
     gsap.to(rootRef.current, {
       opacity: 0,
-      duration: 0.45,
-      ease: "power2.inOut",
-      delay: 0.15,
+      duration: 0.5,
+      ease: EASE_GSAP,
+      delay: 0.12,
       onComplete,
     });
   }, [progress, onComplete]);
@@ -69,22 +70,15 @@ export function Loader({ onComplete }: LoaderProps) {
       ref={rootRef}
       className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-white px-6"
     >
-      <div ref={logoRef} className="mb-8 flex flex-col items-center">
-        <GmsLogo size={56} />
-        <p className="loader-text mt-4 font-[family-name:var(--font-heading)] text-lg font-bold text-[#111827]">
-          GMS AI
-        </p>
-        <p className="loader-text mt-1 text-xs text-[#6b7280]">
-          Garage Master · by Developer Box AI
-        </p>
+      <div ref={brandRef}>
+        <GmsLogo size={52} showWordmark layout="stacked" />
       </div>
-
-      <div className="loader-bar-track w-full max-w-xs">
-        <div className="mb-2 flex justify-between text-[10px] font-medium text-[#6b7280]">
+      <div className="mt-10 w-full max-w-[16rem]">
+        <div className="mb-2 flex justify-between text-xs text-[#6b7280]">
           <span>Loading</span>
           <span>{Math.min(Math.round(progress), 100)}%</span>
         </div>
-        <div className="h-1 overflow-hidden rounded-full bg-[#EDE9FE]">
+        <div className="h-px overflow-hidden rounded-full bg-[#EDE9FE]">
           <div ref={barRef} className="h-full w-0 rounded-full bg-[#8B5CF6]" />
         </div>
       </div>

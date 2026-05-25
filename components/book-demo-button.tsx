@@ -3,21 +3,25 @@
 import { ArrowRight } from "lucide-react";
 import { Button, type ButtonProps } from "./ui/button";
 import { cn } from "@/lib/utils";
+import { useMagnetic } from "@/hooks/use-magnetic";
 
 type BookDemoButtonProps = ButtonProps & {
   label?: string;
   showArrow?: boolean;
+  magnetic?: boolean;
 };
 
-/** Links to #contact — smooth scroll handled by useHashScroll (Lenis-aware). */
 export function BookDemoButton({
   label = "Book Demo",
   showArrow = false,
+  magnetic = false,
   className,
   size,
   variant,
 }: BookDemoButtonProps) {
-  return (
+  const magRef = useMagnetic<HTMLSpanElement>();
+
+  const inner = (
     <Button
       size={size}
       variant={variant}
@@ -29,5 +33,13 @@ export function BookDemoButton({
         {showArrow ? <ArrowRight className="h-4 w-4" aria-hidden /> : null}
       </a>
     </Button>
+  );
+
+  if (!magnetic) return inner;
+
+  return (
+    <span ref={magRef} className="inline-flex">
+      {inner}
+    </span>
   );
 }

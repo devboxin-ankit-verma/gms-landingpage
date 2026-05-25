@@ -8,6 +8,7 @@ import { FooterSection } from "./sections/footer";
 import { useLenis } from "@/hooks/use-lenis";
 import { useHashScroll } from "@/hooks/use-hash-scroll";
 import { usePremiumAnimations } from "@/hooks/use-premium-animations";
+import { useMagneticButtons } from "@/hooks/use-magnetic-buttons";
 
 const HeroSection = dynamic(
   () => import("./sections/hero").then((m) => m.HeroSection),
@@ -18,8 +19,8 @@ const FeatureTimelineSection = dynamic(
     import("./sections/feature-timeline").then((m) => m.FeatureTimelineSection),
   { ssr: false }
 );
-const ProblemsSection = dynamic(
-  () => import("./sections/problems").then((m) => m.ProblemsSection)
+const BentoFeaturesSection = dynamic(
+  () => import("./sections/bento-features").then((m) => m.BentoFeaturesSection)
 );
 const DashboardSection = dynamic(
   () => import("./sections/dashboard").then((m) => m.DashboardSection)
@@ -42,6 +43,7 @@ export function PageWrapper() {
   useLenis();
   useHashScroll();
   usePremiumAnimations(loaded);
+  useMagneticButtons(loaded);
 
   return (
     <>
@@ -52,7 +54,7 @@ export function PageWrapper() {
           <main>
             <HeroSection />
             <FeatureTimelineSection />
-            <ProblemsSection />
+            <BentoFeaturesSection />
             <DashboardSection />
             <VideoSection />
             <TestimonialsSection />
