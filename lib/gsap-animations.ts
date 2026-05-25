@@ -285,18 +285,6 @@ export function initPagePremiumAnimations() {
       ease: EASE_GSAP,
     });
 
-    gsap.from(".video-clip-card", {
-      scrollTrigger: {
-        trigger: ".video-clip-grid",
-        start: "top 88%",
-        toggleActions: TOGGLE_PLAY,
-      },
-      y: 14,
-      opacity: 0,
-      duration: 0.55,
-      stagger: 0.07,
-      ease: EASE_GSAP,
-    });
   });
 
   requestAnimationFrame(() => {

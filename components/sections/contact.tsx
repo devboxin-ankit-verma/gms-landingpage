@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 export function ContactSection() {
   return (
-    <section id="contact" className="section-pad section-alt">
+    <div id="contact" className="min-w-0">
       <Container narrow>
         <SectionHeading
           badge="Contact"
@@ -17,7 +17,7 @@ export function ContactSection() {
           className="section-heading-gap"
         />
         <form
-          className="contact-form mx-auto max-w-xl space-y-4 rounded-3xl border border-[#E5E7EB] bg-white p-6 sm:p-8"
+          className="contact-form mx-auto max-w-xl space-y-4 rounded-3xl border border-[#E5E7EB] bg-transparent p-6 sm:p-8"
           onSubmit={(e) => e.preventDefault()}
         >
           {[
@@ -48,6 +48,6 @@ export function ContactSection() {
           </Button>
         </form>
       </Container>
-    </section>
+    </div>
   );
 }

@@ -1,13 +1,17 @@
 "use client";
 
-import { useEffect, useRef, type RefObject } from "react";
-import { gsap } from "gsap";
+import { useEffect, useRef } from "react";
 import { registerGsap } from "@/lib/gsap-config";
-import {
-  initOrbitAnimation,
-  initOrbitMouseParallax,
-} from "@/lib/animations/orbitAnimation";
+import { initOrbitAnimation } from "@/lib/animations/orbitAnimation";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
+
+/** viewBox space — padding keeps outer bubbles fully inside the SVG */
+const VB = 520;
+const C = VB / 2;
+const PILL_ORBIT = 158;
+const OUTER_ORBIT = 208;
+const BUBBLE_R = 8;
+const OUTER_BUBBLE_COUNT = 8;
 
 const features = [
   {
@@ -63,15 +67,21 @@ const features = [
       </svg>
     ),
   },
-];
+] as const;
 
-type HeroOrbitProps = {
-  innerRef?: RefObject<HTMLDivElement | null>;
-};
+function polarToPercent(angle: number, radius: number) {
+  const x = C + Math.cos(angle) * radius;
+  const y = C + Math.sin(angle) * radius;
+  return {
+    left: `${(x / VB) * 100}%`,
+    top: `${(y / VB) * 100}%`,
+  };
+}
 
-export function HeroOrbit({ innerRef }: HeroOrbitProps) {
+export function HeroOrbit() {
   const localWrap = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
+  const ringsRef = useRef<SVGGElement>(null);
+  const networkRef = useRef<SVGGElement>(null);
   const orbitRef = useRef<HTMLDivElement>(null);
   const hubRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
@@ -79,38 +89,91 @@ export function HeroOrbit({ innerRef }: HeroOrbitProps) {
   useEffect(() => {
     registerGsap();
     const wrap = localWrap.current;
-    const ring = ringRef.current;
+    const ring = ringsRef.current;
+    const network = networkRef.current;
     const orbit = orbitRef.current;
     const hub = hubRef.current;
-    if (!wrap || !ring || !orbit) return;
+    if (!wrap || !ring || !network || !orbit) return;
 
-    const pills = gsap.utils.toArray<HTMLElement>(".orbit-pill", wrap);
+    const pills = Array.from(wrap.querySelectorAll<HTMLElement>(".orbit-pill"));
 
     return initOrbitAnimation(
-      { wrap, ring, orbit, hub, pills },
+      { wrap, ring, network, orbit, hub, pills },
       reducedMotion
     );
   }, [reducedMotion]);
 
+  const outerAngles = Array.from(
+    { length: OUTER_BUBBLE_COUNT },
+    (_, i) => (i / OUTER_BUBBLE_COUNT) * Math.PI * 2 - Math.PI / 2
+  );
+
   return (
     <div
       ref={localWrap}
-      className="relative mx-auto aspect-square w-full"
+      className="hero-orbit relative mx-auto aspect-square size-full overflow-visible"
       aria-label="GMS AI feature orbit"
     >
-      <div
-        ref={ringRef}
-        className="pointer-events-none absolute inset-[6%] rounded-full border border-dashed border-[#8B5CF6]/18"
-        style={{ transformOrigin: "50% 50%" }}
-      />
-      <div className="pointer-events-none absolute inset-[16%] rounded-full border border-[#EDE9FE] bg-[#F8FAFC]/80" />
+      <svg
+        viewBox={`0 0 ${VB} ${VB}`}
+        className="hero-orbit-svg pointer-events-none absolute inset-0 size-full overflow-visible"
+        preserveAspectRatio="xMidYMid meet"
+        aria-hidden
+      >
+        <g transform={`translate(${C} ${C})`}>
+          {/* Static background — does not rotate */}
+          <g ref={ringsRef} className="orbit-rings">
+            <circle
+              r={178}
+              fill="none"
+              stroke="#8B5CF6"
+              strokeOpacity={0.18}
+              strokeWidth={1}
+              strokeDasharray="7 9"
+            />
+            <circle r={132} fill="#F8FAFC" fillOpacity={0.85} stroke="#EDE9FE" strokeWidth={1} />
+          </g>
+
+          <g ref={networkRef} className="orbit-network orbit-network-static">
+            {outerAngles.map((angle, i) => {
+              const x2 = Math.cos(angle) * OUTER_ORBIT;
+              const y2 = Math.sin(angle) * OUTER_ORBIT;
+              return (
+                <g key={`outer-${i}`}>
+                  <line
+                    x1={0}
+                    y1={0}
+                    x2={x2}
+                    y2={y2}
+                    stroke="#8B5CF6"
+                    strokeOpacity={0.14}
+                    strokeWidth={1}
+                  />
+                  <circle
+                    cx={x2}
+                    cy={y2}
+                    r={BUBBLE_R}
+                    className="orbit-bubble"
+                    fill="#8B5CF6"
+                  />
+                </g>
+              );
+            })}
+          </g>
+        </g>
+      </svg>
 
       <div
         ref={hubRef}
-        className="absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center"
+        className="absolute left-1/2 top-1/2 z-20 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center"
       >
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#EDE9FE] bg-white shadow-sm sm:h-16 sm:w-16">
-          <svg viewBox="0 0 48 48" className="h-9 w-9 sm:h-10 sm:w-10" fill="none" aria-hidden>
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#EDE9FE] bg-white p-1 shadow-sm sm:h-[4.5rem] sm:w-[4.5rem]">
+          <svg
+            viewBox="0 0 48 48"
+            className="hero-orbit-hub-icon block h-12 w-12 shrink-0 sm:h-[3.25rem] sm:w-[3.25rem]"
+            fill="none"
+            aria-hidden
+          >
             <rect width="48" height="48" rx="12" fill="#8B5CF6" />
             <path
               d="M14 32V18h10.5c4.2 0 6.5 2.2 6.5 5.5 0 2.4-1.2 4.2-3.2 5l4.7 3.5H14zm6-9.2h3.8c1.5 0 2.3-.8 2.3-2s-.8-2-2.3-2H20v4z"
@@ -126,20 +189,19 @@ export function HeroOrbit({ innerRef }: HeroOrbitProps) {
 
       <div
         ref={orbitRef}
-        className="absolute inset-0"
+        className="orbit-pills-layer absolute inset-0 overflow-visible"
         style={{ transformOrigin: "50% 50%" }}
       >
         {features.map((f, i) => {
           const angle = (i / features.length) * Math.PI * 2 - Math.PI / 2;
-          const r = 128;
-          const x = Math.cos(angle) * r;
-          const y = Math.sin(angle) * r;
+          const pos = polarToPercent(angle, PILL_ORBIT);
           return (
             <div
               key={f.label}
-              className="orbit-pill absolute left-1/2 top-1/2 flex w-[92px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 rounded-xl border border-[#E5E7EB] bg-white px-2 py-2 sm:w-[100px]"
+              className="orbit-pill absolute flex w-[92px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 rounded-xl border border-[#E5E7EB] bg-white px-2 py-2 shadow-sm sm:w-[100px]"
               style={{
-                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+                left: pos.left,
+                top: pos.top,
               }}
             >
               <span className="orbit-pill-icon flex h-8 w-8 items-center justify-center rounded-lg bg-[#EDE9FE] text-[#8B5CF6] transition-transform duration-300">

@@ -94,37 +94,48 @@ export function Navbar() {
       ref={headerRef}
       className="nav-header fixed inset-x-0 top-0 z-50 border-b border-transparent bg-white/80 backdrop-blur-md transition-[border-color,box-shadow,background] duration-300"
     >
-      <Container className="flex h-16 items-center justify-between gap-4">
-        <a
-          href="#hero"
-          className="flex shrink-0 items-center"
-          aria-label="GMS AI home"
-        >
-          <GmsLogo size={36} showWordmark className="items-center" />
-        </a>
+      <Container className="relative flex h-16 items-center">
+        <div className="flex flex-1 items-center justify-start">
+          <a
+            href="#hero"
+            className="flex shrink-0 items-center"
+            aria-label="GMS AI home"
+          >
+            <GmsLogo size={36} showWordmark className="items-center" />
+          </a>
+        </div>
 
-        <div className="hidden items-center gap-8 lg:flex">
+        <nav
+          className="absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-8 lg:flex"
+          aria-label="Primary"
+        >
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="nav-item relative text-sm font-medium text-[#6b7280] transition-colors hover:text-[#111827]"
+              className="nav-item relative whitespace-nowrap text-sm font-medium text-[#6b7280] transition-colors hover:text-[#111827]"
             >
               {l.label}
             </a>
           ))}
-          <BookDemoButton size="sm" className="nav-item shrink-0" magnetic />
-        </div>
+        </nav>
 
-        <button
-          type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-lg text-[#111827] transition-colors hover:bg-[#F8FAFC] lg:hidden"
-          onClick={() => setOpen(!open)}
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-        >
-          {open ? <X size={20} /> : <Menu size={20} />}
-        </button>
+        <div className="flex flex-1 items-center justify-end gap-2">
+          <BookDemoButton
+            size="sm"
+            className="nav-item hidden shrink-0 lg:inline-flex"
+            magnetic
+          />
+          <button
+            type="button"
+            className="relative z-10 flex h-10 w-10 items-center justify-center rounded-lg text-[#111827] transition-colors hover:bg-[#F8FAFC] lg:hidden"
+            onClick={() => setOpen(!open)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+          >
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </Container>
 
       <div

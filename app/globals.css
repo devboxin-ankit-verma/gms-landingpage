@@ -62,6 +62,51 @@ main {
   overflow-x: clip;
 }
 
+/* Hero orbit — SVG viewBox includes padding; nothing clips at edges */
+.hero-visual {
+  --hero-orbit-size: min(92vw, 28rem);
+  aspect-ratio: 1;
+  width: var(--hero-orbit-size);
+  height: var(--hero-orbit-size);
+  max-width: 100%;
+  overflow: visible;
+}
+
+@media (min-width: 640px) {
+  .hero-visual {
+    --hero-orbit-size: min(34rem, 92vw);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-visual {
+    --hero-orbit-size: min(36rem, 100%);
+  }
+}
+
+.hero-section,
+.hero-section .hero-visual,
+.hero-section .hero-visual-inner,
+.hero-orbit,
+.hero-orbit-svg,
+.orbit-pills-layer {
+  overflow: visible;
+}
+
+.hero-section .order-2 {
+  min-width: 0;
+  min-height: 0;
+  overflow: visible;
+}
+
+.hero-orbit-svg,
+.hero-orbit-hub-icon,
+.orbit-pill-icon svg {
+  max-width: none;
+  height: auto;
+  overflow: visible;
+}
+
 img,
 video,
 svg {
@@ -178,6 +223,12 @@ main > section + section {
   background: var(--section);
 }
 
+.faq-contact-section,
+.faq-contact-section #faq,
+.faq-contact-section #contact {
+  background-color: var(--background);
+}
+
 .illustration-box {
   width: 100%;
   max-width: min(100%, 280px);
@@ -212,8 +263,7 @@ main > section + section {
   box-shadow: 0 1px 0 rgba(17, 24, 39, 0.04);
 }
 
-.nav-scrolled .page-container,
-.nav-header .flex.h-16 {
+.nav-scrolled .page-container {
   /* container stays 64px — subtle only */
 }
 

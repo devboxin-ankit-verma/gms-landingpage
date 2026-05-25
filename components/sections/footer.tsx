@@ -3,8 +3,6 @@
 import { Mail, Globe, Share2 } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { GmsLogo } from "../brand/gms-logo";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 
 const columns = [
   { title: "Product", links: ["Features", "Platform", "Dashboard", "Preview"] },
@@ -71,25 +69,7 @@ export function FooterSection() {
               </ul>
             </div>
           ))}
-
-          <div className="md:col-span-2 lg:col-span-1">
-            <h4 className="text-sm font-semibold text-[#111827]">Newsletter</h4>
-            <p className="mt-2 text-sm leading-relaxed text-[#6b7280]">
-              Product updates for workshop teams.
-            </p>
-            <form className="mt-4 flex flex-col gap-2 sm:flex-row" onSubmit={(e) => e.preventDefault()}>
-              <Input type="email" placeholder="Email" className="h-10 flex-1 rounded-xl" />
-              <Button type="submit" size="sm" className="shrink-0 sm:w-auto">
-                Join
-              </Button>
-            </form>
-          </div>
         </div>
-
-        <p className="footer-block mt-10 border-t border-[#E5E7EB] pt-6 text-center text-xs text-[#9ca3af]">
-          © {new Date().getFullYear()} GMS AI · Garage Master AI · Developer Box AI. All rights
-          reserved.
-        </p>
       </Container>
     </footer>
   );

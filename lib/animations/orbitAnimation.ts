@@ -3,7 +3,8 @@ import { DURATION, EASE_GSAP } from "./constants";
 
 export type OrbitAnimationRefs = {
   wrap: HTMLElement;
-  ring: HTMLElement;
+  ring: HTMLElement | SVGGElement;
+  network?: HTMLElement | SVGGElement;
   orbit: HTMLElement;
   hub?: HTMLElement | null;
   pills?: HTMLElement[];
@@ -13,7 +14,7 @@ export function initOrbitAnimation(
   refs: OrbitAnimationRefs,
   reducedMotion: boolean
 ): () => void {
-  const { wrap, ring, orbit, hub, pills = [] } = refs;
+  const { wrap, ring, network, orbit, hub, pills = [] } = refs;
   const mobile = window.matchMedia("(max-width: 767px)").matches;
 
   const ctx = gsap.context(() => {
@@ -48,12 +49,9 @@ export function initOrbitAnimation(
 
     const orbitDuration = mobile ? 100 : 80;
 
-    gsap.to(ring, {
-      rotation: 360,
-      duration: orbitDuration,
-      repeat: -1,
-      ease: "none",
-    });
+    /* Background rings, lines, and bubbles stay fixed — only feature cards orbit */
+    if (ring) gsap.set(ring, { rotation: 0 });
+    if (network) gsap.set(network, { rotation: 0 });
 
     gsap.to(orbit, {
       rotation: 360,
@@ -106,8 +104,8 @@ export function initOrbitMouseParallax(
     const rect = wrap.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    quickRX(x * 8);
-    quickRY(-y * 6);
+    quickRX(x * 5);
+    quickRY(-y * 4);
   };
 
   const onLeave = () => {

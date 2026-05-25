@@ -28,7 +28,7 @@ export function HeroSection() {
     <section
       id="hero"
       ref={ref}
-      className="relative overflow-hidden border-b border-[#E5E7EB] bg-white pt-[calc(var(--header-h)+1.5rem)] pb-12 md:pb-16 lg:pt-[calc(var(--header-h)+2rem)]"
+      className="hero-section relative overflow-visible border-b border-[#E5E7EB] bg-white pt-[calc(var(--header-h)+1.5rem)] pb-16 md:pb-24 lg:pt-[calc(var(--header-h)+2rem)]"
     >
       <div className="hero-grid pointer-events-none absolute inset-0 opacity-40" aria-hidden />
       <div
@@ -37,7 +37,7 @@ export function HeroSection() {
       />
 
       <Container className="relative">
-        <div className="flex min-w-0 flex-col gap-8 sm:gap-10 lg:grid lg:grid-cols-2 lg:items-center lg:gap-12">
+        <div className="flex min-w-0 flex-col gap-8 sm:gap-10 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:items-center lg:gap-10 xl:gap-12">
           <div className="order-1 w-full text-center lg:max-w-md lg:text-left xl:max-w-lg">
             <span className="hero-badge badge mb-4 inline-flex text-[11px] sm:text-xs">
               <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5" aria-hidden />
@@ -97,7 +97,7 @@ export function HeroSection() {
             </ul>
           </div>
 
-          <div className="order-2 flex w-full justify-center lg:justify-end">
+          <div className="order-2 flex w-full min-w-0 justify-center overflow-visible py-4 sm:py-6 lg:w-full lg:max-w-none lg:justify-end">
             <HeroVisual />
           </div>
         </div>

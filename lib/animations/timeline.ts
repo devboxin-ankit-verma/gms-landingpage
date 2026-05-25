@@ -25,7 +25,7 @@ export function initVerticalTimeline(section: HTMLElement): () => void {
       const dot = panel.querySelector(".tl-dot");
       const content = panel.querySelector(".tl-content");
       const visual = panel.querySelector(".tl-visual-inner");
-      const svg = panel.querySelector(".tl-svg");
+      const img = panel.querySelector(".tl-img");
 
       const trigger = {
         trigger: panel,
@@ -81,9 +81,9 @@ export function initVerticalTimeline(section: HTMLElement): () => void {
         );
       }
 
-      if (svg) {
+      if (img) {
         gsap.fromTo(
-          svg,
+          img,
           { scale: 0.85, opacity: 0.5 },
           {
             scale: 1,

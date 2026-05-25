@@ -5,7 +5,8 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Line } from "@react-three/drei";
 import * as THREE from "three";
 
-const RADIUS = 1.65;
+/** Orbit node radius — keep inside camera frustum so spheres are not clipped */
+const RADIUS = 1.42;
 const NODE_COUNT = 6;
 
 type MouseRef = { current: { x: number; y: number } };
@@ -16,8 +17,10 @@ function ParticleField() {
     const count = 36;
     const arr = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      arr[i * 3] = (Math.random() - 0.5) * 5;
-      arr[i * 3 + 1] = (Math.random() - 0.5) * 5;
+      const angle = Math.random() * Math.PI * 2;
+      const dist = Math.random() * 2.2;
+      arr[i * 3] = Math.cos(angle) * dist;
+      arr[i * 3 + 1] = Math.sin(angle) * dist;
       arr[i * 3 + 2] = (Math.random() - 0.5) * 1.5;
     }
     return arr;
@@ -98,12 +101,12 @@ function OrbitGroup({ mouse }: { mouse: MouseRef }) {
     if (parallax.current) {
       parallax.current.rotation.y = THREE.MathUtils.lerp(
         parallax.current.rotation.y,
-        mouse.current.x * 0.12,
+        mouse.current.x * 0.05,
         0.06
       );
       parallax.current.rotation.x = THREE.MathUtils.lerp(
         parallax.current.rotation.x,
-        mouse.current.y * 0.08,
+        mouse.current.y * 0.04,
         0.06
       );
     }
@@ -113,22 +116,6 @@ function OrbitGroup({ mouse }: { mouse: MouseRef }) {
     <group ref={parallax}>
       <group ref={group}>
         <ConnectLines />
-        {Array.from({ length: NODE_COUNT }).map((_, i) => {
-          const angle = (i / NODE_COUNT) * Math.PI * 2 - Math.PI / 2;
-          return (
-            <mesh
-              key={i}
-              position={[Math.cos(angle) * RADIUS, Math.sin(angle) * RADIUS, 0]}
-            >
-              <sphereGeometry args={[0.045, 14, 14]} />
-              <meshStandardMaterial
-                color="#8B5CF6"
-                emissive="#8B5CF6"
-                emissiveIntensity={0.18}
-              />
-            </mesh>
-          );
-        })}
       </group>
     </group>
   );
@@ -153,7 +140,7 @@ function CoreGlow() {
 
 function Scene({ mouse }: { mouse: MouseRef }) {
   return (
-    <>
+    <group scale={0.68}>
       <ambientLight intensity={0.92} />
       <pointLight position={[2, 2, 3]} intensity={0.45} color="#EDE9FE" />
       <pointLight position={[-2, -1, 2]} intensity={0.28} color="#8B5CF6" />
@@ -161,7 +148,7 @@ function Scene({ mouse }: { mouse: MouseRef }) {
       <OrbitRings />
       <OrbitGroup mouse={mouse} />
       <CoreGlow />
-    </>
+    </group>
   );
 }
 
@@ -172,7 +159,7 @@ export function HeroScene({
 }) {
   return (
     <Canvas
-      camera={{ position: [0, 0, 4.2], fov: 42 }}
+      camera={{ position: [0, 0, 7], fov: 30 }}
       dpr={[1, 1.25]}
       gl={{
         alpha: true,

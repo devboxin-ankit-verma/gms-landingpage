@@ -29,7 +29,7 @@ const faqs = [
 
 export function FaqSection() {
   return (
-    <section id="faq" className="section-pad bg-white">
+    <div id="faq" className="min-w-0">
       <Container narrow>
         <SectionHeading
           badge="FAQ"
@@ -39,6 +39,6 @@ export function FaqSection() {
         />
         <FaqList items={faqs} />
       </Container>
-    </section>
+    </div>
   );
 }
