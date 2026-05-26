@@ -104,7 +104,7 @@ export function FeatureTimelineSection() {
   }, []);
 
   return (
-    <section id="features" ref={sectionRef} className="section-pad section-alt">
+    <section id="features" ref={sectionRef} className="tl-section section-pad section-alt">
       <Container>
         <SectionHeading
           badge="How it works"
@@ -115,10 +115,10 @@ export function FeatureTimelineSection() {
 
         <div className="relative mx-auto w-full max-w-5xl lg:max-w-6xl">
           <div
-            className="pointer-events-none absolute bottom-0 left-6 top-0 hidden w-px bg-[#E5E7EB] lg:left-1/2 lg:block lg:-translate-x-1/2"
+            className="tl-spine-track pointer-events-none absolute bottom-0 left-4 top-0 sm:left-6 lg:left-1/2 lg:-translate-x-1/2"
             aria-hidden
           >
-            <div className="tl-line-fill h-full w-full origin-top bg-[#8B5CF6]" />
+            <div className="tl-line-fill h-full w-full origin-top" />
           </div>
 
           <ol className="relative flex list-none flex-col gap-12 lg:gap-20">
@@ -132,7 +132,7 @@ export function FeatureTimelineSection() {
                   className="tl-panel relative list-none"
                 >
                   <div
-                    className="tl-dot absolute left-6 top-8 z-10 hidden h-3.5 w-3.5 -translate-x-1/2 rounded-full border-2 border-[#8B5CF6] bg-white shadow-sm lg:left-1/2 lg:block"
+                    className="tl-dot absolute left-4 top-8 z-10 h-3 w-3 -translate-x-1/2 rounded-full border-2 border-[#5B21B6] bg-white shadow-[0_0_0_3px_rgba(237,233,254,0.9)] sm:left-6 sm:h-3.5 sm:w-3.5 lg:left-1/2"
                     aria-hidden
                   />
 
@@ -142,7 +142,7 @@ export function FeatureTimelineSection() {
                       flip && "lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1"
                     )}
                   >
-                    <div className="tl-content min-w-0 pl-0 lg:pl-0">
+                    <div className="tl-content min-w-0 pl-8 sm:pl-10 lg:pl-0">
                       <span className="text-xs font-semibold uppercase tracking-wider text-[#8B5CF6]">
                         Step {String(i + 1).padStart(2, "0")}
                       </span>

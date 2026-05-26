@@ -17,7 +17,7 @@ export function ContactSection() {
           className="section-heading-gap"
         />
         <form
-          className="contact-form mx-auto max-w-xl space-y-4 rounded-3xl border border-[#E5E7EB] bg-transparent p-6 sm:p-8"
+          className="contact-form mx-auto w-full max-w-xl min-w-0 space-y-4 rounded-3xl border border-[#E5E7EB] bg-transparent p-5 sm:p-8"
           onSubmit={(e) => e.preventDefault()}
         >
           {[

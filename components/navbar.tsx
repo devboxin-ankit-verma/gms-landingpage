@@ -128,7 +128,7 @@ export function Navbar() {
           />
           <button
             type="button"
-            className="relative z-10 flex h-10 w-10 items-center justify-center rounded-lg text-[#111827] transition-colors hover:bg-[#F8FAFC] lg:hidden"
+            className="touch-target relative z-10 flex h-11 w-11 items-center justify-center rounded-lg text-[#111827] transition-colors hover:bg-[#F8FAFC] lg:hidden"
             onClick={() => setOpen(!open)}
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}

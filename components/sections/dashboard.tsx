@@ -6,6 +6,15 @@ import { Container } from "@/components/layout/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { initDashboardAnimations } from "@/lib/gsap-animations";
 
+const metrics = [
+  { l: "Open Jobs", value: 18, icon: Wrench },
+  { l: "Today Revenue", value: 9.2, icon: TrendingUp, prefix: "$", suffix: "k", decimals: 1 },
+  { l: "Customers", value: 1240, icon: Users, separator: true },
+  { l: "Bay Usage", value: 84, icon: Bot, suffix: "%" },
+] as const;
+
+const chartHeights = [40, 55, 48, 70, 62, 78, 65, 82] as const;
+
 export function DashboardSection() {
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -23,66 +32,81 @@ export function DashboardSection() {
           className="section-heading-gap"
         />
 
-        <div ref={panelRef} className="card overflow-hidden">
-          <div className="flex items-center gap-2 border-b border-[#E5E7EB] px-4 py-3 sm:px-5">
-            <span className="h-2 w-2 rounded-full bg-[#E5E7EB]" />
-            <span className="h-2 w-2 rounded-full bg-[#E5E7EB]" />
-            <span className="h-2 w-2 rounded-full bg-[#E5E7EB]" />
-            <span className="mx-auto text-xs text-[#6b7280]">
+        <div ref={panelRef} className="dash-panel">
+          <div className="dash-chrome flex items-center gap-2 px-4 py-3 sm:px-5">
+            <span className="dash-dot dash-dot-close" />
+            <span className="dash-dot dash-dot-min" />
+            <span className="dash-dot dash-dot-max" />
+            <span className="dash-chrome-title mx-auto text-xs font-medium">
               GMS AI · Workshop Dashboard
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 p-4 sm:gap-4 sm:p-5 md:grid-cols-4">
-            {[
-              { l: "Open Jobs", v: "18", icon: Wrench },
-              { l: "Today Revenue", v: "$9.2k", icon: TrendingUp },
-              { l: "Customers", v: "1,240", icon: Users },
-              { l: "Bay Usage", v: "84%", icon: Bot },
-            ].map((m) => (
-              <div
-                key={m.l}
-                className="dash-metric rounded-xl border border-[#E5E7EB] bg-[#F8FAFC] p-4"
-              >
-                <m.icon className="mb-2 h-4 w-4 text-[#8B5CF6]" strokeWidth={1.75} />
-                <p className="text-xs text-[#6b7280]">{m.l}</p>
-                <p className="font-heading mt-1 text-lg font-bold text-[#111827]">
-                  {m.v}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <div className="grid gap-4 border-t border-[#E5E7EB] p-4 sm:p-5 md:grid-cols-3">
-            <div className="dash-chart rounded-xl border border-[#E5E7EB] p-4 md:col-span-2">
-              <p className="mb-3 text-xs font-medium text-[#6b7280]">Service reports</p>
-              <div className="flex h-24 items-end gap-1.5 sm:h-28">
-                {[40, 55, 48, 70, 62, 78, 65, 82].map((h, i) => (
-                  <div
-                    key={i}
-                    className="dash-bar flex-1 rounded-t bg-[#8B5CF6]/25"
-                    style={{ height: `${h}%` }}
-                  />
-                ))}
-              </div>
-            </div>
-            <div className="dash-ai-panel rounded-xl border border-[#EDE9FE] bg-[#EDE9FE]/30 p-4">
-              <div className="flex gap-3">
-                <Bot className="h-4 w-4 shrink-0 text-[#8B5CF6]" />
-                <div>
-                  <p className="text-xs font-semibold text-[#111827]">AI suggestion</p>
-                  <p className="mt-1 text-xs leading-relaxed text-[#6b7280]">
-                    Schedule brake inspections for 4 returning BMW customers this week.
+          <div className="dash-body space-y-4 p-4 sm:space-y-5 sm:p-5">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
+              {metrics.map((m) => (
+                <div key={m.l} className="dash-metric">
+                  <span className="dash-metric-icon">
+                    <m.icon className="h-4 w-4" strokeWidth={1.75} />
+                  </span>
+                  <p className="dash-metric-label text-xs">{m.l}</p>
+                  <p
+                    className="dash-metric-value font-heading mt-1 text-lg font-bold sm:text-xl"
+                    data-value={m.value}
+                    data-prefix={"prefix" in m ? m.prefix : ""}
+                    data-suffix={"suffix" in m ? m.suffix : ""}
+                    data-decimals={"decimals" in m ? String(m.decimals) : "0"}
+                    data-separator={"separator" in m && m.separator ? "true" : "false"}
+                  >
+                    0
                   </p>
+                </div>
+              ))}
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="dash-chart md:col-span-2">
+                <div className="mb-3 flex items-center justify-between gap-2">
+                  <p className="dash-chart-title text-xs font-semibold uppercase tracking-wide">
+                    Service reports
+                  </p>
+                  <span className="dash-chart-badge text-[10px] font-medium">Live</span>
+                </div>
+                <div className="dash-bars flex h-24 items-end gap-1.5 sm:h-32">
+                  {chartHeights.map((h, i) => (
+                    <div
+                      key={i}
+                      className="dash-bar group/bar relative flex-1"
+                      style={{ height: `${h}%` }}
+                    >
+                      <span className="dash-bar-fill block h-full w-full rounded-t-md" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="dash-ai-panel">
+                <div className="flex gap-3">
+                  <span className="dash-ai-icon shrink-0">
+                    <Bot className="h-4 w-4" strokeWidth={1.75} />
+                  </span>
+                  <div>
+                    <p className="dash-ai-title text-xs font-semibold">AI suggestion</p>
+                    <p className="dash-ai-text mt-1.5 text-xs leading-relaxed">
+                      Schedule brake inspections for 4 returning BMW customers this week.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="border-t border-[#E5E7EB] px-4 py-3 sm:px-5">
-            <p className="text-xs text-[#6b7280]">
-              Recent: Oil change · Job #2041 · Audi A4 · Completed
-            </p>
+            <div className="dash-footer">
+              <p className="dash-footer-text text-xs">
+                <span className="dash-footer-accent">Recent</span>
+                {" · "}Oil change · Job #2041 · Audi A4 ·{" "}
+                <span className="dash-footer-status">Completed</span>
+              </p>
+            </div>
           </div>
         </div>
       </Container>

@@ -17,7 +17,7 @@ export function HeroVisual() {
   return (
     <div
       ref={wrapRef}
-      className="hero-visual relative mx-auto w-full max-w-none shrink-0 overflow-visible"
+      className="hero-visual anim-float-slow relative mx-auto w-full max-w-none shrink-0 overflow-visible"
       style={{ perspective: 1200 }}
     >
       <HeroOrbit />

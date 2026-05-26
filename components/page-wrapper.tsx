@@ -62,7 +62,7 @@ export function PageWrapper() {
               aria-label="FAQ and contact"
               className="faq-contact-section section-pad bg-white"
             >
-              <div className="mx-auto grid w-full min-w-0 max-w-7xl items-start gap-10 px-6 lg:grid-cols-2 lg:gap-12 lg:px-8 xl:gap-16">
+              <div className="faq-contact-grid mx-auto grid w-full min-w-0 max-w-7xl items-start gap-8 px-4 sm:gap-10 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8 xl:gap-16">
                 <FaqSection />
                 <ContactSection />
               </div>

@@ -28,7 +28,7 @@ export function HeroSection() {
     <section
       id="hero"
       ref={ref}
-      className="hero-section relative overflow-visible border-b border-[#E5E7EB] bg-white pt-[calc(var(--header-h)+1.5rem)] pb-16 md:pb-24 lg:pt-[calc(var(--header-h)+2rem)]"
+      className="hero-section relative overflow-x-clip overflow-y-visible border-b border-[#E5E7EB] bg-white pt-[calc(var(--header-h)+1.25rem)] pb-12 sm:pt-[calc(var(--header-h)+1.5rem)] sm:pb-16 md:pb-24 lg:pt-[calc(var(--header-h)+2rem)]"
     >
       <div className="hero-grid pointer-events-none absolute inset-0 opacity-40" aria-hidden />
       <div

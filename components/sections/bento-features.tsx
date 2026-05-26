@@ -97,7 +97,7 @@ export function BentoFeaturesSection() {
           className="section-heading-gap"
         />
 
-        <div className="platform-grid grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="platform-grid grid min-w-0 grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
           <div className="platform-card card card-hover flex items-center gap-3 p-5 opacity-100 md:col-span-2 lg:col-span-1 lg:row-span-2 lg:flex-col lg:items-start lg:justify-center lg:p-6">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#EDE9FE] text-[#8B5CF6]">
               <LayoutGrid className="h-5 w-5" strokeWidth={2} />

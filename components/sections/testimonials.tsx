@@ -47,7 +47,7 @@ export function TestimonialsSection() {
           description="Garage owners and service managers using GMS AI across repair operations."
           className="section-heading-gap"
         />
-        <div className="grid gap-4 md:grid-cols-3 md:gap-5">
+        <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-5">
           {items.map((t) => (
             <article
               key={t.name}

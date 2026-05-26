@@ -62,7 +62,7 @@ export function VideoSection() {
               }`}
               aria-label="Play GMS AI preview"
             >
-              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-[#E5E7EB] bg-white">
+              <span className="touch-target flex h-12 w-12 items-center justify-center rounded-full border border-[#E5E7EB] bg-white shadow-sm sm:h-14 sm:w-14">
                 <Play className="ml-0.5 h-4 w-4 text-[#8B5CF6]" fill="#8B5CF6" />
               </span>
             </button>
@@ -70,7 +70,7 @@ export function VideoSection() {
             <button
               type="button"
               onClick={toggleAiPlay}
-              className={`absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] bg-white transition-opacity hover:border-[#8B5CF6]/30 ${
+              className={`touch-target absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-full border border-[#E5E7EB] bg-white shadow-sm transition-opacity hover:border-[#8B5CF6]/30 sm:h-11 sm:w-11 ${
                 aiPlaying ? "opacity-100" : "pointer-events-none opacity-0"
               }`}
               aria-label="Pause GMS AI preview"
