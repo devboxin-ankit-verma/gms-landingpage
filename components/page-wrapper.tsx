@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { Loader } from "./loader";
 import { Navbar } from "./navbar";
 import { FooterSection } from "./sections/footer";
+import { SiteCopyright } from "./sections/site-copyright";
 import { useLenis } from "@/hooks/use-lenis";
 import { useHashScroll } from "@/hooks/use-hash-scroll";
 import { usePremiumAnimations } from "@/hooks/use-premium-animations";
@@ -69,6 +70,7 @@ export function PageWrapper() {
             </section>
           </main>
           <FooterSection />
+          <SiteCopyright />
         </>
       )}
     </>

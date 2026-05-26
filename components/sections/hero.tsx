@@ -28,60 +28,77 @@ export function HeroSection() {
     <section
       id="hero"
       ref={ref}
-      className="hero-section relative overflow-x-clip overflow-y-visible border-b border-[#E5E7EB] bg-white pt-[calc(var(--header-h)+1.25rem)] pb-12 sm:pt-[calc(var(--header-h)+1.5rem)] sm:pb-16 md:pb-24 lg:pt-[calc(var(--header-h)+2rem)]"
+      className="hero-section relative isolate overflow-hidden border-b border-[#E5E7EB] bg-white pt-[calc(var(--header-h)+1.25rem)] pb-12 sm:pt-[calc(var(--header-h)+1.5rem)] sm:pb-16 md:pb-24 lg:pt-[calc(var(--header-h)+2rem)]"
     >
-      <div className="hero-grid pointer-events-none absolute inset-0 opacity-40" aria-hidden />
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,#EDE9FE_0%,transparent_52%)]"
-        aria-hidden
-      />
+      <div className="hero-fx pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
+        <div className="hero-grid absolute inset-0 opacity-40" />
+        <div className="hero-fx-glow absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,#EDE9FE_0%,transparent_52%)]" />
+      </div>
 
-      <Container className="relative">
-        <div className="flex min-w-0 flex-col gap-8 sm:gap-10 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:items-center lg:gap-10 xl:gap-12">
-          <div className="order-1 w-full text-center lg:max-w-md lg:text-left xl:max-w-lg">
-            <span className="hero-badge badge mb-4 inline-flex text-[11px] sm:text-xs">
-              <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5" aria-hidden />
-              AI Operating System
-            </span>
-
-            <h1 className="hero-title font-heading text-[1.625rem] font-bold leading-[1.15] tracking-tight text-[#111827] sm:text-[1.875rem] md:text-[2rem] lg:text-[2.25rem]">
-              <span className="hero-line block overflow-hidden py-0.5">
-                <span className="hero-line-inner block">Run your garage smarter with</span>
+      <Container className="hero-inner relative z-10 min-w-0">
+        <div className="hero-layout mx-auto grid w-full min-w-0 max-w-7xl grid-cols-1 items-center gap-10 sm:gap-12 lg:grid-cols-2 lg:gap-12 xl:gap-14">
+          <div className="hero-copy order-1 flex w-full min-w-0 flex-col">
+            <div className="hero-copy-head">
+              <span className="hero-badge badge inline-flex self-center text-[11px] sm:text-xs lg:self-start">
+                <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5" aria-hidden />
+                AI Operating System
               </span>
-              <span className="hero-line block overflow-hidden py-0.5">
-                <span className="hero-line-inner block">
-                  <ShinyText
-                    text="GMS AI"
-                    speed={2.2}
-                    delay={0.35}
-                    color="#7C3AED"
-                    shineColor="#EDE9FE"
-                    spread={120}
-                    direction="left"
-                    pauseOnHover
-                    disabled={reducedMotion}
-                    className="font-heading text-[1.625rem] font-bold sm:text-[1.875rem] md:text-[2rem] lg:text-[2.25rem]"
-                  />
+
+              <h1 className="hero-title font-heading text-[1.625rem] font-bold leading-[1.2] tracking-tight text-[#111827] sm:text-[1.875rem] md:text-[2rem] lg:text-[2.25rem]">
+                <span className="hero-line block overflow-hidden">
+                  <span className="hero-line-inner block">Run your garage smarter with</span>
                 </span>
-              </span>
-            </h1>
-
-            <p className="hero-desc mx-auto mt-4 max-w-md text-sm leading-relaxed text-[#6b7280] sm:text-[0.9375rem] lg:mx-0">
-              Billing, bays, inventory, and customers — unified in one calm AI workspace
-              built for modern service centers.
-            </p>
-
-            <div className="hero-cta mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 lg:justify-start">
-              <BookDemoButton size="default" showArrow magnetic className="sm:!h-11" />
-              <Button variant="outline" size="default" className="magnetic-btn sm:!h-11" asChild>
-                <a href="#preview">
-                  <Play className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  Watch Preview
-                </a>
-              </Button>
+                <span className="hero-line block overflow-hidden">
+                  <span className="hero-line-inner block">
+                    <ShinyText
+                      text="GMS AI"
+                      speed={2.2}
+                      delay={0.35}
+                      color="#7C3AED"
+                      shineColor="#EDE9FE"
+                      spread={120}
+                      direction="left"
+                      pauseOnHover
+                      disabled={reducedMotion}
+                      className="font-heading text-[1.625rem] font-bold sm:text-[1.875rem] md:text-[2rem] lg:text-[2.25rem]"
+                    />
+                  </span>
+                </span>
+              </h1>
             </div>
 
-            <ul className="hero-trust mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 lg:justify-start">
+            <div className="hero-copy-actions">
+              <p className="hero-desc">
+                Billing, bays, inventory, and customers — unified in one calm AI workspace
+                built for modern service centers.
+              </p>
+
+              <div className="hero-cta">
+                <div className="hero-cta-slot">
+                  <BookDemoButton
+                    size="default"
+                    showArrow
+                    magnetic
+                    className="hero-cta-btn"
+                  />
+                </div>
+                <div className="hero-cta-slot">
+                  <Button
+                    variant="outline"
+                    size="default"
+                    className="hero-cta-btn magnetic-btn"
+                    asChild
+                  >
+                    <a href="#preview" className="hero-cta-link">
+                      <Play className="h-4 w-4 shrink-0" aria-hidden />
+                      Watch Preview
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <ul className="hero-trust">
               {TRUST.map((item) => (
                 <li
                   key={item}
@@ -97,7 +114,7 @@ export function HeroSection() {
             </ul>
           </div>
 
-          <div className="order-2 flex w-full min-w-0 justify-center overflow-visible py-4 sm:py-6 lg:w-full lg:max-w-none lg:justify-end">
+          <div className="hero-visual-col order-2 flex w-full min-w-0 items-center justify-center">
             <HeroVisual />
           </div>
         </div>

@@ -12,8 +12,15 @@ interface FaqItem {
   a: string;
 }
 
-function FaqAccordionItem({ q, a }: FaqItem) {
-  const [open, setOpen] = useState(false);
+function FaqAccordionItem({
+  q,
+  a,
+  open,
+  onToggle,
+}: FaqItem & {
+  open: boolean;
+  onToggle: () => void;
+}) {
   const outerRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
 
@@ -44,7 +51,7 @@ function FaqAccordionItem({ q, a }: FaqItem) {
     <div className="faq-item card overflow-hidden">
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={onToggle}
         className="flex min-h-12 w-full items-center justify-between gap-3 px-4 py-4 text-left text-sm font-medium text-[#111827] transition-colors hover:text-[#8B5CF6] sm:px-5"
         aria-expanded={open}
       >
@@ -57,7 +64,10 @@ function FaqAccordionItem({ q, a }: FaqItem) {
         />
       </button>
       <div ref={outerRef} className="h-0 overflow-hidden opacity-0">
-        <div ref={innerRef} className="px-4 pb-4 text-sm leading-relaxed text-[#6b7280] sm:px-5 sm:text-[0.9375rem]">
+        <div
+          ref={innerRef}
+          className="px-4 pb-4 text-sm leading-relaxed text-[#6b7280] sm:px-5 sm:text-[0.9375rem]"
+        >
           {a}
         </div>
       </div>
@@ -66,10 +76,20 @@ function FaqAccordionItem({ q, a }: FaqItem) {
 }
 
 export function FaqList({ items }: { items: FaqItem[] }) {
+  const [openIndex, setOpenIndex] = useState(0);
+
   return (
     <div className="faq-list mx-auto max-w-2xl space-y-2.5">
-      {items.map((faq) => (
-        <FaqAccordionItem key={faq.q} q={faq.q} a={faq.a} />
+      {items.map((faq, index) => (
+        <FaqAccordionItem
+          key={faq.q}
+          q={faq.q}
+          a={faq.a}
+          open={openIndex === index}
+          onToggle={() =>
+            setOpenIndex((current) => (current === index ? -1 : index))
+          }
+        />
       ))}
     </div>
   );

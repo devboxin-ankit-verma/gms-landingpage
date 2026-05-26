@@ -5,13 +5,20 @@ import { registerGsap } from "@/lib/gsap-config";
 import { initOrbitAnimation } from "@/lib/animations/orbitAnimation";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
-/** viewBox space — padding keeps outer bubbles fully inside the SVG */
-const VB = 520;
+/** Extra viewBox padding — bubbles stay inside clipped hero frame */
+const VB = 560;
 const C = VB / 2;
-const PILL_ORBIT = 158;
-const OUTER_ORBIT = 208;
-const BUBBLE_R = 8;
+const PILL_ORBIT = 168;
+const OUTER_ORBIT = 250;
+const BUBBLE_R = 12;
+/** Every spoke ends at the same radius (perfect circle) */
+const SPOKE_END = OUTER_ORBIT - BUBBLE_R;
 const OUTER_BUBBLE_COUNT = 8;
+
+function bubbleAngle(index: number) {
+  const step = (Math.PI * 2) / OUTER_BUBBLE_COUNT;
+  return index * step - Math.PI / 2 + step / 2;
+}
 
 const features = [
   {
@@ -103,58 +110,82 @@ export function HeroOrbit() {
     );
   }, [reducedMotion]);
 
-  const outerAngles = Array.from(
-    { length: OUTER_BUBBLE_COUNT },
-    (_, i) => (i / OUTER_BUBBLE_COUNT) * Math.PI * 2 - Math.PI / 2
-  );
-
   return (
     <div
       ref={localWrap}
-      className="hero-orbit relative mx-auto aspect-square size-full overflow-visible"
+      className="hero-orbit relative mx-auto aspect-square size-full overflow-hidden"
       aria-label="GMS AI feature orbit"
     >
       <svg
         viewBox={`0 0 ${VB} ${VB}`}
-        className="hero-orbit-svg pointer-events-none absolute inset-0 size-full overflow-visible"
+        className="hero-orbit-svg pointer-events-none absolute inset-0 z-[1] size-full overflow-hidden"
         preserveAspectRatio="xMidYMid meet"
         aria-hidden
       >
+        <defs>
+          <linearGradient id="orbit-bubble-fill" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#A78BFA" />
+            <stop offset="100%" stopColor="#7C3AED" />
+          </linearGradient>
+          <filter id="orbit-bubble-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="1.25" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
         <g transform={`translate(${C} ${C})`}>
-          {/* Static background — does not rotate */}
           <g ref={ringsRef} className="orbit-rings">
             <circle
-              r={178}
+              r={OUTER_ORBIT}
+              className="orbit-bubble-ring"
               fill="none"
               stroke="#8B5CF6"
-              strokeOpacity={0.18}
+              strokeOpacity={0.1}
               strokeWidth={1}
-              strokeDasharray="7 9"
             />
-            <circle r={132} fill="#F8FAFC" fillOpacity={0.85} stroke="#EDE9FE" strokeWidth={1} />
+            <circle
+              r={188}
+              fill="none"
+              stroke="#8B5CF6"
+              strokeOpacity={0.14}
+              strokeWidth={1}
+              strokeDasharray="8 10"
+            />
+            <circle
+              r={140}
+              fill="#FAFAFF"
+              fillOpacity={0.9}
+              stroke="#EDE9FE"
+              strokeWidth={1.25}
+            />
           </g>
 
-          <g ref={networkRef} className="orbit-network orbit-network-static">
-            {outerAngles.map((angle, i) => {
-              const x2 = Math.cos(angle) * OUTER_ORBIT;
-              const y2 = Math.sin(angle) * OUTER_ORBIT;
+          <g ref={networkRef} className="orbit-network">
+            {Array.from({ length: OUTER_BUBBLE_COUNT }, (_, i) => {
+              const angle = bubbleAngle(i);
+              const bx = Math.cos(angle) * OUTER_ORBIT;
+              const by = Math.sin(angle) * OUTER_ORBIT;
+              const lx = Math.cos(angle) * SPOKE_END;
+              const ly = Math.sin(angle) * SPOKE_END;
               return (
-                <g key={`outer-${i}`}>
+                <g key={`bubble-${i}`} className="orbit-bubble-spoke">
                   <line
                     x1={0}
                     y1={0}
-                    x2={x2}
-                    y2={y2}
-                    stroke="#8B5CF6"
-                    strokeOpacity={0.14}
-                    strokeWidth={1}
+                    x2={lx}
+                    y2={ly}
+                    className="orbit-spoke-line"
                   />
                   <circle
-                    cx={x2}
-                    cy={y2}
+                    cx={bx}
+                    cy={by}
                     r={BUBBLE_R}
                     className="orbit-bubble"
-                    fill="#8B5CF6"
+                    fill="url(#orbit-bubble-fill)"
+                    filter="url(#orbit-bubble-glow)"
                   />
                 </g>
               );
@@ -189,7 +220,7 @@ export function HeroOrbit() {
 
       <div
         ref={orbitRef}
-        className="orbit-pills-layer absolute inset-0 overflow-visible"
+        className="orbit-pills-layer absolute inset-0 z-[2] overflow-hidden"
         style={{ transformOrigin: "50% 50%" }}
       >
         {features.map((f, i) => {

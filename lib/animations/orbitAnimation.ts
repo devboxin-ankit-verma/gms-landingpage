@@ -20,7 +20,6 @@ export function initOrbitAnimation(
   const ctx = gsap.context(() => {
     gsap.from(wrap, {
       opacity: 0,
-      y: 16,
       duration: DURATION.slow,
       ease: EASE_GSAP,
       delay: 0.12,
@@ -49,9 +48,7 @@ export function initOrbitAnimation(
 
     const orbitDuration = mobile ? 100 : 80;
 
-    /* Background rings, lines, and bubbles stay fixed — only feature cards orbit */
     if (ring) gsap.set(ring, { rotation: 0 });
-    if (network) gsap.set(network, { rotation: 0 });
 
     gsap.to(orbit, {
       rotation: 360,
@@ -72,7 +69,7 @@ export function initOrbitAnimation(
 
     pills.forEach((pill) => {
       pill.addEventListener("mouseenter", () => {
-        gsap.to(pill, { scale: 1.06, duration: 0.35, ease: EASE_GSAP });
+        gsap.to(pill, { scale: 1.03, duration: 0.35, ease: EASE_GSAP });
       });
       pill.addEventListener("mouseleave", () => {
         gsap.to(pill, { scale: 1, duration: 0.4, ease: EASE_GSAP });

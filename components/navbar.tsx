@@ -94,47 +94,49 @@ export function Navbar() {
       ref={headerRef}
       className="nav-header fixed inset-x-0 top-0 z-50 border-b border-transparent bg-white/80 backdrop-blur-md transition-[border-color,box-shadow,background] duration-300"
     >
-      <Container className="relative flex h-16 items-center">
-        <div className="flex flex-1 items-center justify-start">
-          <a
-            href="#hero"
-            className="flex shrink-0 items-center"
-            aria-label="GMS AI home"
-          >
-            <GmsLogo size={36} showWordmark className="items-center" />
-          </a>
-        </div>
-
-        <nav
-          className="absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-8 lg:flex"
-          aria-label="Primary"
-        >
-          {links.map((l) => (
+      <Container className="nav-inner relative pt-2.5 pb-2">
+        <div className="grid h-11 grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-4">
+          <div className="flex min-w-0 items-center justify-self-start">
             <a
-              key={l.href}
-              href={l.href}
-              className="nav-item relative whitespace-nowrap text-sm font-medium text-[#6b7280] transition-colors hover:text-[#111827]"
+              href="#hero"
+              className="nav-brand flex min-h-9 items-center"
+              aria-label="GMS AI home"
             >
-              {l.label}
+              <GmsLogo size={36} showWordmark className="items-center" />
             </a>
-          ))}
-        </nav>
+          </div>
 
-        <div className="flex flex-1 items-center justify-end gap-2">
-          <BookDemoButton
-            size="sm"
-            className="nav-item hidden shrink-0 lg:inline-flex"
-            magnetic
-          />
-          <button
-            type="button"
-            className="touch-target relative z-10 flex h-11 w-11 items-center justify-center rounded-lg text-[#111827] transition-colors hover:bg-[#F8FAFC] lg:hidden"
-            onClick={() => setOpen(!open)}
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
+          <nav
+            className="nav-item hidden items-center justify-center gap-8 lg:flex"
+            aria-label="Primary"
           >
-            {open ? <X size={20} /> : <Menu size={20} />}
-          </button>
+            {links.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className="relative whitespace-nowrap text-sm font-medium text-[#6b7280] transition-colors hover:text-[#111827]"
+              >
+                {l.label}
+              </a>
+            ))}
+          </nav>
+
+          <div className="flex items-center justify-self-end gap-2">
+            <BookDemoButton
+              size="sm"
+              className="nav-item nav-cta hidden !h-9 shrink-0 lg:inline-flex"
+              magnetic
+            />
+            <button
+              type="button"
+              className="nav-menu-btn touch-target relative z-10 flex h-9 w-9 items-center justify-center rounded-lg text-[#111827] transition-colors hover:bg-[#F8FAFC] lg:hidden"
+              onClick={() => setOpen(!open)}
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+            >
+              {open ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
       </Container>
 

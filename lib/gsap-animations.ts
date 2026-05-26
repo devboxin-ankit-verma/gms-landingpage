@@ -67,8 +67,8 @@ export function initHeroEntrance(scope: HTMLElement | null) {
       )
       .from(".hero-desc", { y: 16, opacity: 0, duration: 0.7 }, 0.38)
       .from(
-        ".hero-cta > *",
-        { y: 12, opacity: 0, duration: 0.5, stagger: 0.08 },
+        ".hero-cta-slot",
+        { y: 10, opacity: 0, duration: 0.5, stagger: 0.08 },
         0.5
       )
       .from(
@@ -77,10 +77,10 @@ export function initHeroEntrance(scope: HTMLElement | null) {
         0.62
       )
       .from(
-        ".hero-visual-inner",
+        ".hero-visual-frame",
         {
           opacity: 0,
-          scale: 0.94,
+          scale: 0.96,
           duration: DURATION.slow,
           transformOrigin: "50% 50%",
         },
