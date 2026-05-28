@@ -20,6 +20,16 @@ npm install
 npm run dev
 ```
 
+## EmailJS (Contact form)
+
+Set these env vars (create `.env.local`):
+
+```bash
+NEXT_PUBLIC_EMAILJS_SERVICE_ID=your_service_id
+NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=your_template_id
+NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key
+```
+
 ## Sections
 
 1. Minimal loader (skeleton + purple progress)

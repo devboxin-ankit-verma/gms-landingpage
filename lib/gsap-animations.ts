@@ -109,6 +109,7 @@ export function initNavbarEntrance(header: HTMLElement | null) {
       opacity: 0,
       duration: 0.7,
       ease: EASE_GSAP,
+      clearProps: "transform,opacity",
     });
     gsap.from(header.querySelectorAll(".nav-item"), {
       y: -8,
@@ -117,6 +118,7 @@ export function initNavbarEntrance(header: HTMLElement | null) {
       stagger: 0.05,
       ease: EASE_GSAP,
       delay: 0.15,
+      clearProps: "transform,opacity",
     });
   }, header);
 

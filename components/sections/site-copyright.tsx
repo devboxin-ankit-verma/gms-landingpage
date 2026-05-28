@@ -12,7 +12,7 @@ export function SiteCopyright() {
             rel="noopener noreferrer"
             className="font-medium text-[#7C3AED] transition-colors hover:text-[#5B21B6]"
           >
-            Developer Box AI
+            Developerbox Ai Factory
           </a>
           {" "}
           · © 2026

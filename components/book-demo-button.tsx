@@ -7,12 +7,14 @@ import { useMagnetic } from "@/hooks/use-magnetic";
 
 type BookDemoButtonProps = ButtonProps & {
   label?: string;
+  href?: string;
   showArrow?: boolean;
   magnetic?: boolean;
 };
 
 export function BookDemoButton({
   label = "Book Demo",
+  href = "#contact",
   showArrow = false,
   magnetic = false,
   className,
@@ -28,7 +30,7 @@ export function BookDemoButton({
       className={cn("cursor-pointer", className)}
       asChild
     >
-      <a href="#contact">
+      <a href={href}>
         {label}
         {showArrow ? <ArrowRight className="h-4 w-4" aria-hidden /> : null}
       </a>

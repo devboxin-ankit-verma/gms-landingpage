@@ -14,6 +14,7 @@ export function Loader({ onComplete }: LoaderProps) {
   const barRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const brandRef = useRef<HTMLDivElement>(null);
+  const completedRef = useRef(false);
 
   useEffect(() => {
     if (!brandRef.current) return;
@@ -45,6 +46,11 @@ export function Loader({ onComplete }: LoaderProps) {
   }, []);
 
   useEffect(() => {
+    const t = window.setTimeout(() => setProgress(100), 1400);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
     if (barRef.current) {
       gsap.to(barRef.current, {
         width: `${Math.min(progress, 100)}%`,
@@ -56,6 +62,8 @@ export function Loader({ onComplete }: LoaderProps) {
 
   useEffect(() => {
     if (progress < 100 || !rootRef.current) return;
+    if (completedRef.current) return;
+    completedRef.current = true;
     gsap.to(rootRef.current, {
       opacity: 0,
       duration: 0.5,
@@ -68,7 +76,7 @@ export function Loader({ onComplete }: LoaderProps) {
   return (
     <div
       ref={rootRef}
-      className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-white px-6"
+      className="fixed inset-0 z-10000 flex flex-col items-center justify-center bg-white px-6"
     >
       <div ref={brandRef}>
         <GmsLogo size={52} showWordmark layout="stacked" />

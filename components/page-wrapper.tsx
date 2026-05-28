@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { Loader } from "./loader";
 import { Navbar } from "./navbar";
 import { FooterSection } from "./sections/footer";
 import { SiteCopyright } from "./sections/site-copyright";
+import { WhatsappFloat } from "./whatsapp-float";
 import { useLenis } from "@/hooks/use-lenis";
 import { useHashScroll } from "@/hooks/use-hash-scroll";
 import { usePremiumAnimations } from "@/hooks/use-premium-animations";
@@ -46,6 +47,21 @@ export function PageWrapper() {
   usePremiumAnimations(loaded);
   useMagneticButtons(loaded);
 
+  useEffect(() => {
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) window.location.reload();
+    };
+    const onPopState = () => {
+      window.location.reload();
+    };
+    window.addEventListener("pageshow", onPageShow);
+    window.addEventListener("popstate", onPopState);
+    return () => {
+      window.removeEventListener("pageshow", onPageShow);
+      window.removeEventListener("popstate", onPopState);
+    };
+  }, []);
+
   return (
     <>
       {!loaded && <Loader onComplete={() => setLoaded(true)} />}
@@ -71,6 +87,7 @@ export function PageWrapper() {
           </main>
           <FooterSection />
           <SiteCopyright />
+          <WhatsappFloat />
         </>
       )}
     </>

@@ -53,12 +53,9 @@ function BrandWordmark({
         </span>
       )}
       <span
-        className={cn(
-          "mt-0.5 block font-medium text-[#9ca3af]",
-          footer ? "text-[10px]" : "text-[10px] text-[#6b7280]"
-        )}
+        className="mt-0.5 block text-[10px] font-medium text-[#6b7280]"
       >
-        by Developer Box AI
+        by Developerbox Ai Factory
       </span>
     </div>
   );

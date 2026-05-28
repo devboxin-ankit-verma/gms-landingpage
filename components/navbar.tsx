@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { gsap } from "gsap";
+import { usePathname } from "next/navigation";
 import { Container } from "@/components/layout/container";
 import { BookDemoButton } from "./book-demo-button";
 import { GmsLogo } from "./brand/gms-logo";
@@ -21,6 +22,8 @@ export function Navbar() {
   const headerRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuInnerRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  const base = pathname === "/" ? "" : "/";
 
   useEffect(() => {
     const cleanupEntrance = initNavbarEntrance(headerRef.current);
@@ -94,11 +97,11 @@ export function Navbar() {
       ref={headerRef}
       className="nav-header fixed inset-x-0 top-0 z-50 border-b border-transparent bg-white/80 backdrop-blur-md transition-[border-color,box-shadow,background] duration-300"
     >
-      <Container className="nav-inner relative pt-2.5 pb-2">
-        <div className="grid h-11 grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-4">
+      <Container className="nav-inner relative pt-4 pb-3">
+        <div className="flex h-11 items-center justify-between gap-3 sm:gap-4 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-center">
           <div className="flex min-w-0 items-center justify-self-start">
             <a
-              href="#hero"
+              href={`${base}#hero`}
               className="nav-brand flex min-h-9 items-center"
               aria-label="GMS AI home"
             >
@@ -113,7 +116,7 @@ export function Navbar() {
             {links.map((l) => (
               <a
                 key={l.href}
-                href={l.href}
+                href={`${base}${l.href}`}
                 className="relative whitespace-nowrap text-sm font-medium text-[#6b7280] transition-colors hover:text-[#111827]"
               >
                 {l.label}
@@ -124,8 +127,8 @@ export function Navbar() {
           <div className="flex items-center justify-self-end gap-2">
             <BookDemoButton
               size="sm"
-              className="nav-item nav-cta hidden !h-9 shrink-0 lg:inline-flex"
-              magnetic
+              href={`${base}#contact`}
+              className="nav-item nav-cta hidden h-8! px-3 text-[11px] leading-none shrink-0 lg:inline-flex hover:translate-y-0 active:translate-y-0"
             />
             <button
               type="button"
@@ -154,7 +157,7 @@ export function Navbar() {
             {links.map((l) => (
               <a
                 key={l.href}
-                href={l.href}
+                href={`${base}${l.href}`}
                 className="mobile-nav-link w-full max-w-xs rounded-xl px-4 py-3 text-center text-sm font-medium text-[#111827] transition-colors hover:bg-[#F8FAFC] hover:text-[#8B5CF6]"
                 onClick={() => setOpen(false)}
               >
@@ -162,6 +165,7 @@ export function Navbar() {
               </a>
             ))}
             <BookDemoButton
+              href={`${base}#contact`}
               className="mobile-nav-cta mt-2 w-full max-w-xs justify-center"
               magnetic
             />
