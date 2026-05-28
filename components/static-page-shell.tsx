@@ -8,7 +8,7 @@ export function StaticPageShell({ children }: { children: ReactNode }) {
   return (
     <>
       <Navbar />
-      <div className="pt-(--header-h)">{children}</div>
+      <div style={{ paddingTop: "calc(var(--header-h) + 1rem)" }}>{children}</div>
       <FooterSection />
       <SiteCopyright />
       <WhatsappFloat />
