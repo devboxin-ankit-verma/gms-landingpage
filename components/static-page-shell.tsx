@@ -8,7 +8,7 @@ export function StaticPageShell({ children }: { children: ReactNode }) {
   return (
     <>
       <Navbar />
-      {children}
+      <div className="pt-(--header-h)">{children}</div>
       <FooterSection />
       <SiteCopyright />
       <WhatsappFloat />
